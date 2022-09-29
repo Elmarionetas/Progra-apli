@@ -22,13 +22,13 @@ c = connection.cursor()
 #c = conexion.cursor()
 
 # width and height
-w = 450
-h = 525
+w = 1440
+h = 1024
 # background color
-bgcolor = "#bdc3c7"
+bgcolor = "#ECDAFB"
 
 # ----------- CENTER FORM ------------- #
-root.overrideredirect(1) # remove border
+#root.overrideredirect(1) # remove border
 ws = root.winfo_screenwidth()
 hs = root.winfo_screenheight()
 x = (ws-w)/2
@@ -37,24 +37,24 @@ root.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
 # ----------- HEADER ------------- #
 
-headerframe = tk.Frame(root, highlightbackgroun='yellow', highlightcolor='yellow', highlightthickness=2, bg='#95a5a6', width=w, height=70)
-titleframe = tk.Frame(headerframe, bg='yellow', padx=1, pady=1)
-title_label = tk.Label(titleframe, text='Login', padx=20, pady=5, bg='green', fg='#fff', font=('Tahoma',24), width=8)
-close_button = tk.Button(headerframe, text='x', borderwidth=1, relief='solid', font=('Verdana',12))
+headerframe = tk.Frame(root, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=w, height=70)
+titleframe = tk.Frame(headerframe, bg='#9E91E9', padx=1, pady=1)
+title_label = tk.Label(titleframe, text=' INICIAR SESIÓN ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+#close_button = tk.Button(headerframe, text='x', borderwidth=1, relief='solid', font=('Verdana',12))
 
 headerframe.pack()
 titleframe.pack()
 title_label.pack()
-close_button.pack()
+#close_button.pack()
 
-titleframe.place(y=26, relx=0.5, anchor=CENTER)
-close_button.place(x=410, y=10)
+titleframe.place(y=45, relx=0.5, anchor=CENTER)
+#close_button.place(x=410, y=10)
 
 # close window
 def close_win():
     root.destroy()
 
-close_button['command'] = close_win
+#close_button['command'] = close_win
 
 # ----------- END HEADER ------------- #
 
@@ -62,13 +62,13 @@ mainframe = tk.Frame(root, width=w, height=h)
 
 # ----------- Login Page ------------- #
 loginframe = tk.Frame(mainframe, width=w, height=h)
-login_contentframe = tk.Frame(loginframe, padx=30, pady=100, highlightbackgroun='yellow', highlightcolor='yellow', highlightthickness=2, bg=bgcolor)
+login_contentframe = tk.Frame(loginframe, padx=450, pady=300, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
-username_label = tk.Label(login_contentframe, text='Username:', font=('Verdana',16), bg=bgcolor)
-password_label = tk.Label(login_contentframe, text='Password:', font=('Verdana',16), bg=bgcolor)
+username_label = tk.Label(login_contentframe, text='Usuario:', font=('Orbitron',16), bg=bgcolor)
+password_label = tk.Label(login_contentframe, text='Contraseña:', font=('Orbitron',16), bg=bgcolor)
 
-username_entry = tk.Entry(login_contentframe, font=('Verdana',16))
-password_entry = tk.Entry(login_contentframe, font=('Verdana',16), show='*')
+username_entry = tk.Entry(login_contentframe, font=('Orbitron',16))
+password_entry = tk.Entry(login_contentframe, font=('Orbitron',16), show='😡')
 
 login_button = tk.Button(login_contentframe,text="Login", font=('Verdana',16), bg='#2980b9',fg='#fff', padx=25, pady=10, width=25)
 
