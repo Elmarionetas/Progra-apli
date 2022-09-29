@@ -117,7 +117,7 @@ def login():
         mainformwindow.protocol("WM_DELETE_WINDOW", close_win) # close the app
 
     else:
-        messagebox.showwarning('Error','wrong username or password')
+        messagebox.showwarning('Error','Usuario o contraseña errada')
 
 
 
@@ -127,7 +127,7 @@ login_button['command'] = login
 # ----------- Register Page ------------- #
 
 registerframe = tk.Frame(mainframe, width=w, height=h)
-register_contentframe = tk.Frame(registerframe, padx=450, pady=300, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
+register_contentframe = tk.Frame(registerframe, padx=400, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 fullname_label_rg = tk.Label(register_contentframe, text='Nombre:', font=('Orbitron',14), bg=bgcolor)
 username_label_rg = tk.Label(register_contentframe, text='Usuario:', font=('Orbitron',14), bg=bgcolor)
@@ -152,9 +152,9 @@ male_radiobutton = tk.Radiobutton(radiosframe, text='Hombre', font=('Orbitron',1
 female_radiobutton = tk.Radiobutton(radiosframe, text='Mujer', font=('Orbitron',14), bg=bgcolor, variable=gender, value='Female')
 
 
-register_button = tk.Button(register_contentframe,text="Registro", font=('Orbitron',16), bg='#2980b9',fg='#fff', padx=25, pady=10, width=25)
+register_button = tk.Button(register_contentframe,text="Registro", font=('Orbitron',16), bg='#9E91E9',fg='#fff', padx=25, pady=10, width=25)
 
-go_login_label = tk.Label(register_contentframe, text=">> " , font=('Verdana',10), bg=bgcolor, fg='red')
+go_login_label = tk.Label(register_contentframe, text=">> Inicie sesion con su cuenta  " , font=('Verdana',10), bg=bgcolor, fg='black')
 
 #mainframe.pack(fill='both', expand=1)
 #registerframe.pack(fill='both', expand=1)
