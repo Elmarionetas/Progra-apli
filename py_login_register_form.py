@@ -130,9 +130,9 @@ registerframe = tk.Frame(mainframe, width=w, height=h)
 register_contentframe = tk.Frame(registerframe, padx=400, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 fullname_label_rg = tk.Label(register_contentframe, text='Nombre:', font=('Orbitron',14), bg=bgcolor)
+confirmpass_label_rg = tk.Label(register_contentframe, text='Apellido:', font=('Orbitron',14), bg=bgcolor)
 username_label_rg = tk.Label(register_contentframe, text='Usuario:', font=('Orbitron',14), bg=bgcolor)
 password_label_rg = tk.Label(register_contentframe, text='Contraseña:', font=('Orbitron',14), bg=bgcolor)
-confirmpass_label_rg = tk.Label(register_contentframe, text='Confirme Contraseña:', font=('Orbitron',14), bg=bgcolor)
 phone_label_rg = tk.Label(register_contentframe, text='Teléfono:', font=('Orbitron',14), bg=bgcolor)
 gender_label_rg = tk.Label(register_contentframe, text='Género:', font=('Orbitron',14), bg=bgcolor)
 
@@ -154,7 +154,7 @@ female_radiobutton = tk.Radiobutton(radiosframe, text='Mujer', font=('Orbitron',
 
 register_button = tk.Button(register_contentframe,text="Registro", font=('Orbitron',16), bg='#9E91E9',fg='#fff', padx=25, pady=10, width=25)
 
-go_login_label = tk.Label(register_contentframe, text=">> Inicie sesion con su cuenta  " , font=('Verdana',10), bg=bgcolor, fg='black')
+go_login_label = tk.Label(register_contentframe, text=">> Inicie sesion con su cuenta  " , font=('Orbitron',10), bg=bgcolor, fg='black')
 
 #mainframe.pack(fill='both', expand=1)
 #registerframe.pack(fill='both', expand=1)
