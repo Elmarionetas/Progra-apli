@@ -22,8 +22,8 @@ c = connection.cursor()
 #c = conexion.cursor()
 
 # width and height
-w = 1440
-h = 1024
+w = root.winfo_screenwidth()-150
+h = root.winfo_screenheight()-150
 # background color
 bgcolor = "#ECDAFB"
 
@@ -37,7 +37,7 @@ root.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
 # ----------- HEADER ------------- #
 
-headerframe = tk.Frame(root, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=w, height=70)
+headerframe = tk.Frame(root, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
 titleframe = tk.Frame(headerframe, bg='#9E91E9', padx=1, pady=1)
 title_label = tk.Label(titleframe, text=' INICIAR SESIÓN ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
 #close_button = tk.Button(headerframe, text='x', borderwidth=1, relief='solid', font=('Verdana',12))
@@ -127,10 +127,10 @@ login_button['command'] = login
 # ----------- Register Page ------------- #
 
 registerframe = tk.Frame(mainframe, width=w, height=h)
-register_contentframe = tk.Frame(registerframe, padx=400, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
+register_contentframe = tk.Frame(registerframe, padx=hs/5, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 fullname_label_rg = tk.Label(register_contentframe, text='Nombre:', font=('Orbitron',14), bg=bgcolor)
-confirmpass_label_rg = tk.Label(register_contentframe, text='Apellido:', font=('Orbitron',14), bg=bgcolor)
+surname_label_rg = tk.Label(register_contentframe, text='Apellido:', font=('Orbitron',14), bg=bgcolor)
 username_label_rg = tk.Label(register_contentframe, text='Usuario:', font=('Orbitron',14), bg=bgcolor)
 password_label_rg = tk.Label(register_contentframe, text='Contraseña:', font=('Orbitron',14), bg=bgcolor)
 phone_label_rg = tk.Label(register_contentframe, text='Teléfono:', font=('Orbitron',14), bg=bgcolor)
@@ -142,7 +142,7 @@ gender_label_rg = tk.Label(register_contentframe, text='Género:', font=('Orbitr
 fullname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
 username_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
 password_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
-confirmpass_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
+surname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
 phone_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
 
 radiosframe = tk.Frame(register_contentframe)
@@ -154,7 +154,7 @@ female_radiobutton = tk.Radiobutton(radiosframe, text='Mujer', font=('Orbitron',
 
 register_button = tk.Button(register_contentframe,text="Registro", font=('Orbitron',16), bg='#9E91E9',fg='#fff', padx=25, pady=10, width=25)
 
-go_login_label = tk.Label(register_contentframe, text=">> Inicie sesion con su cuenta  " , font=('Orbitron',10), bg=bgcolor, fg='black')
+go_login_label = tk.Label(register_contentframe, text=">> Inicie sesion con su cuenta " , font=('Orbitron',10), bg=bgcolor, fg='black')
 
 #mainframe.pack(fill='both', expand=1)
 #registerframe.pack(fill='both', expand=1)
@@ -163,14 +163,14 @@ register_contentframe.pack(fill='both', expand=1)
 fullname_label_rg.grid(row=0, column=0, pady=5, sticky='e')
 fullname_entry_rg.grid(row=0, column=1)
 
-username_label_rg.grid(row=1, column=0, pady=5, sticky='e')
-username_entry_rg.grid(row=1, column=1)
+username_label_rg.grid(row=2, column=0, pady=5, sticky='e')
+username_entry_rg.grid(row=2, column=1)
 
-password_label_rg.grid(row=2, column=0, pady=5, sticky='e')
-password_entry_rg.grid(row=2, column=1)
+password_label_rg.grid(row=3, column=0, pady=5, sticky='e')
+password_entry_rg.grid(row=3, column=1)
 
-confirmpass_label_rg.grid(row=3, column=0, pady=5, sticky='e')
-confirmpass_entry_rg.grid(row=3, column=1)
+surname_label_rg.grid(row=1, column=0, pady=5, sticky='e')
+surname_entry_rg.grid(row=1, column=1)
 
 phone_label_rg.grid(row=4, column=0, pady=5, sticky='e')
 phone_entry_rg.grid(row=4, column=1)
@@ -224,7 +224,7 @@ def register():
     fullname = fullname_entry_rg.get().strip() # remove white space
     username = username_entry_rg.get().strip()
     password = password_entry_rg.get().strip()
-    confirm_password = confirmpass_entry_rg.get().strip()
+    surname = surname_entry_rg.get().strip()
     phone = phone_entry_rg.get().strip()
     gdr = gender.get()
     
@@ -232,7 +232,7 @@ def register():
 
     if len(fullname) > 0 and  len(username) > 0 and len(password) > 0 and len(phone) > 0:
         if check_username(username) == False: 
-            if password == confirm_password:
+            if password:
                 vals = (fullname, username, password, phone, gdr)
                 insert_query = "INSERT INTO users(fullname, username, password, phone, gender) VALUES (%s,%s,%s,%s,%s)"
                 c.execute(insert_query, vals)
