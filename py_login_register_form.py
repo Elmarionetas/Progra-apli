@@ -1,3 +1,4 @@
+from time import CLOCK_REALTIME
 import tkinter as tk 
 from tkinter import *
 from tkinter import ttk 
@@ -135,7 +136,7 @@ username_label_rg = tk.Label(register_contentframe, text='Usuario:', font=('Orbi
 password_label_rg = tk.Label(register_contentframe, text='Contraseña:', font=('Orbitron',14), bg=bgcolor)
 phone_label_rg = tk.Label(register_contentframe, text='Teléfono:', font=('Orbitron',14), bg=bgcolor)
 gender_label_rg = tk.Label(register_contentframe, text='Género:', font=('Orbitron',14), bg=bgcolor)
-
+email_label_rg = tk.Label(register_contentframe, text='Correo:', font=('Orbitron',14), bg=bgcolor)
 
 
 
@@ -144,6 +145,9 @@ username_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=
 password_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
 surname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
 phone_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
+email_entry_rg = tk.Entry(register_contentframe, font=('Orbitron', 14), width=22)
+
+
 
 radiosframe = tk.Frame(register_contentframe)
 gender = StringVar()
@@ -175,8 +179,11 @@ surname_entry_rg.grid(row=1, column=1)
 phone_label_rg.grid(row=4, column=0, pady=5, sticky='e')
 phone_entry_rg.grid(row=4, column=1)
 
-gender_label_rg.grid(row=5, column=0, pady=5, sticky='e')
-radiosframe.grid(row=5, column=1)
+email_label_rg.grid(row=5, column=0, pady=5, sticky='e')
+email_entry_rg.grid(row=5, column=1)
+
+gender_label_rg.grid(row=6, column=0, pady=5, sticky='e')
+radiosframe.grid(row=6, column=1)
 male_radiobutton.grid(row=0, column=0)
 female_radiobutton.grid(row=0, column=1)
 
