@@ -1,4 +1,3 @@
-from time import CLOCK_REALTIME
 import tkinter as tk 
 from tkinter import *
 from tkinter import ttk 
@@ -69,7 +68,7 @@ username_label = tk.Label(login_contentframe, text='Usuario:', font=('Orbitron',
 password_label = tk.Label(login_contentframe, text='Contraseña:', font=('Orbitron',16), bg=bgcolor)
 
 username_entry = tk.Entry(login_contentframe, font=('Orbitron',16))
-password_entry = tk.Entry(login_contentframe, font=('Orbitron',16), show='😡')
+password_entry = tk.Entry(login_contentframe, font=('Orbitron',16), show='*')
 
 login_button = tk.Button(login_contentframe,text="Ingresar", font=('Orbitron',18), bg='#9E91E9',fg='#fff', padx=25, pady=10, width=25)
 
@@ -128,7 +127,7 @@ login_button['command'] = login
 # ----------- Register Page ------------- #
 
 registerframe = tk.Frame(mainframe, width=w, height=h)
-register_contentframe = tk.Frame(registerframe, padx=hs/5, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
+register_contentframe = tk.Frame(registerframe, padx=500, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 fullname_label_rg = tk.Label(register_contentframe, text='Nombre:', font=('Orbitron',14), bg=bgcolor)
 surname_label_rg = tk.Label(register_contentframe, text='Apellido:', font=('Orbitron',14), bg=bgcolor)
@@ -141,9 +140,9 @@ email_label_rg = tk.Label(register_contentframe, text='Correo:', font=('Orbitron
 
 
 fullname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
+surname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
 username_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
-password_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
-surname_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='😡')
+password_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22, show='*')
 phone_entry_rg = tk.Entry(register_contentframe, font=('Orbitron',14), width=22)
 email_entry_rg = tk.Entry(register_contentframe, font=('Orbitron', 14), width=22)
 
@@ -193,7 +192,6 @@ register_button.grid(row=7, column=0, columnspan=2, pady=20)
 go_login_label.grid(row=8, column=0, columnspan=2, pady=10)
 
 
-
 # --------------------------------------- #
 
 
@@ -232,6 +230,7 @@ def register():
     username = username_entry_rg.get().strip()
     password = password_entry_rg.get().strip()
     surname = surname_entry_rg.get().strip()
+    email = email_entry_rg.get().strip()
     phone = phone_entry_rg.get().strip()
     gdr = gender.get()
     
@@ -240,17 +239,17 @@ def register():
     if len(fullname) > 0 and  len(username) > 0 and len(password) > 0 and len(phone) > 0:
         if check_username(username) == False: 
             if password:
-                vals = (fullname, username, password, phone, gdr)
-                insert_query = "INSERT INTO users(fullname, username, password, phone, gender) VALUES (%s,%s,%s,%s,%s)"
+                vals = (fullname, username, password, phone, surname, gdr, email)
+                insert_query = "INSERT INTO users(fullname, username, password, phone, surname, gender, email) VALUES (%s,%s,%s,%s,%s,%s,%s)"
                 c.execute(insert_query, vals)
                 connection.commit()
-                messagebox.showinfo('Register','your account has been created successfully')
+                messagebox.showinfo('Enhorabuena','Tu cuenta ha sido creada')
             else:
-                messagebox.showwarning('Password','incorrect password confirmation')
+                messagebox.showwarning('Contraseña')
         else:
-            messagebox.showwarning('Duplicate Username','This Username Already Exists, try another one')
+            messagebox.showwarning('Usuario existente','Este usuario ya esta registrado, intente con otro')
     else:
-        messagebox.showwarning('Empty Fields','make sure to enter all the information')
+        messagebox.showwarning('Información incompleta','Rellene todos los campos')
 
 register_button['command'] = register
 
