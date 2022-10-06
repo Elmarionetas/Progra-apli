@@ -2,8 +2,9 @@
 import tkinter as tk
 from tkinter import *
 
-w = 1200
-h = 650
+root = Tk()
+w = root.winfo_screenwidth()-150
+h = root.winfo_screenheight()-150
 
 class mainform:
     def __init__(self, master):
@@ -38,5 +39,5 @@ class mainform:
         # ------------------------------ #
 
         self.master.config(menu=self.menubar, bg="#ecf0f1")
-        self.lbl = tk.Label(self.master, text='Main Form', font=('verdana',50, 'bold'), fg='#2A2C2B',bg="#ecf0f1")
+        self.lbl = tk.Label(self.master, text='Scrum Board', font=('Orbitron',50, 'bold'), fg='#2A2C2B',bg="#ecf0f1")
         self.lbl.place(rely=0.5, relx=0.5, anchor=CENTER)
