@@ -37,7 +37,7 @@ root.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
 # ----------- HEADER ------------- #
 
-headerframe = tk.Frame(root, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
+headerframe = tk.Frame(root, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
 titleframe = tk.Frame(headerframe, bg='#9E91E9', padx=1, pady=1)
 title_label = tk.Label(titleframe, text=' INICIAR SESIÓN ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
 #close_button = tk.Button(headerframe, text='x', borderwidth=1, relief='solid', font=('Verdana',12))
@@ -62,7 +62,7 @@ mainframe = tk.Frame(root, width=w, height=h)
 
 # ----------- Login Page ------------- #
 loginframe = tk.Frame(mainframe, width=w, height=h)
-login_contentframe = tk.Frame(loginframe, padx=450, pady=300, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
+login_contentframe = tk.Frame(loginframe, padx=600, pady=300, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 username_label = tk.Label(login_contentframe, text='Usuario:', font=('Orbitron',16), bg=bgcolor)
 password_label = tk.Label(login_contentframe, text='Contraseña:', font=('Orbitron',16), bg=bgcolor)
@@ -127,7 +127,7 @@ login_button['command'] = login
 # ----------- Register Page ------------- #
 
 registerframe = tk.Frame(mainframe, width=w, height=h)
-register_contentframe = tk.Frame(registerframe, padx=500, pady=250, highlightbackgroun='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
+register_contentframe = tk.Frame(registerframe, padx=600, pady=200, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
 fullname_label_rg = tk.Label(register_contentframe, text='Nombre:', font=('Orbitron',14), bg=bgcolor)
 surname_label_rg = tk.Label(register_contentframe, text='Apellido:', font=('Orbitron',14), bg=bgcolor)

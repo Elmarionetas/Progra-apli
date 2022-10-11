@@ -6,8 +6,8 @@ from tkinter import *
 class mainform:
     def __init__(self, master):
         self.master = master
-        w = master.winfo_screenwidth()-150
-        h = master.winfo_screenheight()-150
+        w = self.master.winfo_screenwidth()-150
+        h = self.master.winfo_screenheight()-150
         # ----------- CENTER FORM ------------- #
         ws = self.master.winfo_screenwidth()
         hs = self.master.winfo_screenheight()
@@ -20,23 +20,32 @@ class mainform:
         self.frame = tk.Frame(self.master)
         self.menubar = Menu(self.frame)
         self.products = Menu(self.menubar)
-        self.products.add_command(label="Add")
-        self.products.add_command(label="Edit")
-        self.products.add_command(label="Remove")
+        self.products.add_command(label="Scrum Board")
+        self.products.add_command(label="To do")
+        self.products.add_command(label="In progres")
+        self.products.add_command(label="Done")
 
-        self.menubar.add_cascade(menu=self.products, label="Product")
-
-        self.categories = Menu(self.menubar)
-        self.categories.add_command(label="Add")
-        self.categories.add_command(label="Edit")
-        self.categories.add_command(label="Remove")
-
-        self.menubar.add_cascade(menu=self.categories, label="Category")
+        self.menubar.add_cascade(menu=self.products, label="Menu")
 
         self.frame.pack()
 
         # ------------------------------ #
 
-        self.master.config(menu=self.menubar, bg="#ecf0f1")
-        self.lbl = tk.Label(self.master, text='Scrum Board', font=('Orbitron',50, 'bold'), fg='#2A2C2B',bg="#ecf0f1")
-        self.lbl.place(rely=0.5, relx=0.5, anchor=CENTER)
+        self.master.config(menu=self.menubar, bg="#9E91E9")
+
+        self.header = tk.Frame (self.master, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
+        self.titleframe = tk.Frame(self.header, bg='#9E91E9', padx=1, pady=1)
+        self.lbl = tk.Label(self.titleframe, text=' SCRUM BOARD ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+
+        self.scrumframe =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
+        self.ToDoframe = tk.Frame (self.scrumframe, bg='#9E91E9', padx=1, pady=1)
+        self.toDo = tk.Label (self.ToDoframe, text= 'TO DO', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.scrumframe.pack()
+        self.ToDoframe.pack()
+        self.toDo.pack()
+        self.ToDoframe.place(rely=0.1, relx=0.5, anchor=CENTER)
