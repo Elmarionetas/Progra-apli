@@ -2,13 +2,12 @@
 import tkinter as tk
 from tkinter import *
 
-root = Tk()
-w = root.winfo_screenwidth()-150
-h = root.winfo_screenheight()-150
 
 class mainform:
     def __init__(self, master):
         self.master = master
+        w = master.winfo_screenwidth()-150
+        h = master.winfo_screenheight()-150
         # ----------- CENTER FORM ------------- #
         ws = self.master.winfo_screenwidth()
         hs = self.master.winfo_screenheight()
