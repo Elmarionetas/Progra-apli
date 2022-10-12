@@ -23,7 +23,7 @@ c = connection.cursor()
 
 # width and height
 w = root.winfo_screenwidth()-150
-h = root.winfo_screenheight()-150
+h = root.winfo_screenheight()-170
 # background color
 bgcolor = "#ECDAFB"
 
