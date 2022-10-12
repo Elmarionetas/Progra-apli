@@ -5,7 +5,7 @@ from tkinter.ttk import *
 from tkinter import filedialog
 from tkinter import messagebox
 #import mysql.connector
-from py_mainform import mainform
+from py_mainformpro import proyectos
 import psycopg2
 
 root = Tk()
@@ -18,6 +18,7 @@ connection = psycopg2.connect(
         database='aplicada'
     )
 
+root.title('ScrumBase')
 c = connection.cursor()
 #c = conexion.cursor()
 
@@ -111,10 +112,10 @@ def login():
     user = c.fetchone()
     if user is not None:
         #messagebox.showinfo('Test','Test')
-        mainformwindow = tk.Toplevel()
-        app = mainform(mainformwindow)
+        proyectoswindow = tk.Toplevel()
+        app = proyectos(proyectoswindow)
         root.withdraw() # hide the root
-        mainformwindow.protocol("WM_DELETE_WINDOW", close_win) # close the app
+        proyectoswindow.protocol("WM_DELETE_WINDOW", close_win) # close the app
 
     else:
         messagebox.showwarning('Error','Usuario o contraseña errada')

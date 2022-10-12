@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import *
 
 
-class mainform:
+class sb:
 
     def __init__(self, master):
         self.master = master
@@ -21,6 +21,7 @@ class mainform:
         self.frame = tk.Frame(self.master)
         self.menubar = Menu(self.frame)
         self.products = Menu(self.menubar)
+        self.products.add_command(label="Proyectos")
         self.products.add_command(label="Scrum Board")
         self.products.add_command(label="To do")
         self.products.add_command(label="In progres")
