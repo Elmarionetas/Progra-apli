@@ -33,6 +33,8 @@ class mainform:
 
         self.master.config(menu=self.menubar, bg="#9E91E9")
 
+        # --------TITULO-----------------#
+
         self.header = tk.Frame (self.master, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
         self.titleframe = tk.Frame(self.header, bg='#9E91E9', padx=1, pady=1)
         self.lbl = tk.Label(self.titleframe, text=' SCRUM BOARD ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
@@ -41,6 +43,7 @@ class mainform:
         self.lbl.pack()
         self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
 
+        # --------TO DO-----------------#
 
         self.scrumframe =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
         self.ToDoframe = tk.Frame (self.scrumframe, bg='#9E91E9', padx=1, pady=1)
@@ -48,4 +51,5 @@ class mainform:
         self.scrumframe.pack()
         self.ToDoframe.pack()
         self.toDo.pack()
+        self.scrumframe.place(rely=0.52, relx=0.15, anchor=CENTER)
         self.ToDoframe.place(rely=0.1, relx=0.5, anchor=CENTER)
