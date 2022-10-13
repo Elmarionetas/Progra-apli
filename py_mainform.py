@@ -52,7 +52,7 @@ class sb:
 
         self.ToDoCua =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
         self.ToDoframe = tk.Frame (self.ToDoCua, bg='#9E91E9', padx=1, pady=1)
-        self.toDo = tk.Button (self.ToDoframe, text= 'TO DO', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.toDo = tk.Button (self.ToDoframe, text= 'TO DO', padx=50, pady=5, fg='black', font=('Orbitron',20), width=10)
         self.ToDoCua.pack()
         self.ToDoframe.pack()
         self.toDo.pack()
@@ -63,7 +63,7 @@ class sb:
 
         self.InProCua =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
         self.InProframe = tk.Frame (self.InProCua, bg='#9E91E9', padx=1, pady=1)
-        self.InPro = tk.Button (self.InProframe, text= 'IN PROGRESS', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.InPro = tk.Button (self.InProframe, text= 'IN PROGRESS', padx=50, pady=5, fg='black', font=('Orbitron',20), width=10)
         self.InProCua.pack()
         self.InProframe.pack()
         self.InPro.pack()
@@ -74,7 +74,7 @@ class sb:
 
         self.DoneCua =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
         self.Doneframe = tk.Frame (self.DoneCua, bg='#9E91E9', padx=1, pady=1)
-        self.Done = tk.Button (self.Doneframe, text= 'Done', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.Done = tk.Button (self.Doneframe, text= 'DONE', padx=50, pady=5, fg='black', font=('Orbitron',20), width=10)
         self.DoneCua.pack()
         self.Doneframe.pack()
         self.Done.pack()

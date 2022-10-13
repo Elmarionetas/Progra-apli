@@ -4,9 +4,12 @@ from tkinter import *
 from py_mainform import *
 
 class proyectos:
-    
+
     def __init__ (self, master):
 
+        def close_win():
+            Tk.destroy
+        
         self.master = master
         w = self.master.winfo_screenwidth()-150
         h = self.master.winfo_screenheight()-170
