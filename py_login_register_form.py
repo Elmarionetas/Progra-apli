@@ -62,6 +62,7 @@ def close_win():
 mainframe = tk.Frame(root, width=w, height=h)
 
 # ----------- Login Page ------------- #
+
 loginframe = tk.Frame(mainframe, width=w, height=h)
 login_contentframe = tk.Frame(loginframe, padx=600, pady=300, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=30, bg=bgcolor)
 
@@ -74,8 +75,6 @@ password_entry = tk.Entry(login_contentframe, font=('Orbitron',16), show='*')
 login_button = tk.Button(login_contentframe,text="Ingresar", font=('Orbitron',18), bg='#9E91E9',fg='#fff', padx=25, pady=10, width=25)
 
 go_register_label = tk.Label(login_contentframe, text=">> Baboso, Regístrese" , font=('Orbitron',10), bg=bgcolor, fg='black')
-
-#------------FALTAAAAAAAAAAAAAAAAAAAAA---------------#
 
 mainframe.pack(fill='both', expand=1)
 loginframe.pack(fill='both', expand=1)
@@ -168,7 +167,7 @@ fullname_label_rg.grid(row=0, column=0, pady=5, sticky='e')
 fullname_entry_rg.grid(row=0, column=1)
 
 username_label_rg.grid(row=2, column=0, pady=5, sticky='e')
-username_entry_rg.grid(row=2, column=1)
+username_entry_rg.grid(row=2, column=1) 
 
 password_label_rg.grid(row=3, column=0, pady=5, sticky='e')
 password_entry_rg.grid(row=3, column=1)

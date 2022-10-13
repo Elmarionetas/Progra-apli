@@ -1,11 +1,14 @@
 # main form
 import tkinter as tk
 from tkinter import *
-
+from py_todo import todo
+from py_progress import progress
+from py_done import done
 
 class sb:
 
     def __init__(self, master):
+
         self.master = master
         w = self.master.winfo_screenwidth()-150
         h = self.master.winfo_screenheight()-170
@@ -20,7 +23,7 @@ class sb:
 
         self.frame = tk.Frame(self.master)
         self.menubar = Menu(self.frame)
-        self.products = Menu(self.menubar)
+        self.products = Menu(self.menubar, tearoff=0)
         self.products.add_command(label="Proyectos")
         self.products.add_command(label="Scrum Board")
         self.products.add_command(label="To do")
@@ -71,9 +74,27 @@ class sb:
 
         self.DoneCua =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=450, height=800)
         self.Doneframe = tk.Frame (self.DoneCua, bg='#9E91E9', padx=1, pady=1)
-        self.Done = tk.Button (self.Doneframe, text= 'IN PROGRESS', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.Done = tk.Button (self.Doneframe, text= 'Done', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
         self.DoneCua.pack()
         self.Doneframe.pack()
         self.Done.pack()
         self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        def scrumsalto():
+            scrumwindow = tk.Toplevel()
+            app = todo(scrumwindow)
+        
+        self.toDo['command'] = scrumsalto
+
+        def scrumsalto2():
+            scrumwindow = tk.Toplevel()
+            app = progress(scrumwindow)
+        
+        self.InPro['command'] = scrumsalto2
+
+        def scrumsalto3():
+            scrumwindow = tk.Toplevel()
+            app = done(scrumwindow)
+        
+        self.Done['command'] = scrumsalto3

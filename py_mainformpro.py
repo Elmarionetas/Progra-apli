@@ -1,11 +1,10 @@
 # main form
-from logging import root
 import tkinter as tk
 from tkinter import *
-from py_mainform import sb
+from py_mainform import *
 
 class proyectos:
-
+    
     def __init__ (self, master):
 
         self.master = master
@@ -18,24 +17,9 @@ class proyectos:
         y = (hs-h)/2
         self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
 
-        # ----------- MENU ------------- #
-
-        self.frame = tk.Frame(self.master)
-        self.menubar = Menu(self.frame)
-        self.products = Menu(self.menubar)
-        self.products.add_command(label="Proyectos")
-        self.products.add_command(label="Scrum Board")
-        self.products.add_command(label="To do")
-        self.products.add_command(label="In progres")
-        self.products.add_command(label="Done")
-
-        self.menubar.add_cascade(menu=self.products, label="Menu")
-
-        self.frame.pack()
-
         # ------------------------------ #
 
-        self.master.config(menu=self.menubar, bg="#9E91E9")
+        self.master.config(bg="#9E91E9")
         self.sc = tk.Button (self.master, text= ' CERRAR SESION ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
         self.sc.pack()
         self.sc.place(rely=0.5, relx=0.5, anchor=CENTER)
