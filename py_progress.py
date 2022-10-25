@@ -45,7 +45,7 @@ class progress:
         self.lbl.pack()
         self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
 
-        # -------- TO DO ------------- #
+        # -------- IN PROGRESS ------------- #
 
         self.InProCua =tk.Frame (self.master, highlightbackground='#ECDAFB', highlightcolor='#ECDAFB', highlightthickness=2, bg='#ECDAFB', width=ws-250, height=800)
         self.InProframe = tk.Frame (self.InProCua, bg='#9E91E9', padx=1, pady=1)

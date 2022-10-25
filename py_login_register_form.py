@@ -20,6 +20,7 @@ connection = psycopg2.connect(
 
 root.title('ScrumBase')
 root.iconbitmap('s.ico')
+root.withdraw
 c = connection.cursor()
 #c = conexion.cursor()
 

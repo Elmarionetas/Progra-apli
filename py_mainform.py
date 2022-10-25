@@ -4,6 +4,7 @@ from tkinter import *
 from py_todo import todo
 from py_progress import progress
 from py_done import done
+import py_mainformpro
 
 class sb:
 
@@ -43,10 +44,13 @@ class sb:
         self.header = tk.Frame (self.master, highlightbackground='#9E91E9', highlightcolor='#9E91E9', highlightthickness=2, bg='#9E91E9', width=ws, height=70)
         self.titleframe = tk.Frame(self.header, bg='#9E91E9', padx=1, pady=1)
         self.lbl = tk.Label(self.titleframe, text=' SCRUM BOARD ', padx=50, pady=5, fg='black', font=('Orbitron',25), width=10)
+        self.Vl = tk.Button (self.master, text= ' PROYECTOS ', padx=50, pady=5, fg='black', font=('Orbitron',18), width=7)
         self.header.pack()
         self.titleframe.pack()
         self.lbl.pack()
+        self.Vl.pack()
         self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         # -------- TO DO ------------- #
 
@@ -83,18 +87,28 @@ class sb:
 
         def scrumsalto():
             scrumwindow = tk.Toplevel()
+            self.master.withdraw()
             app = todo(scrumwindow)
         
         self.toDo['command'] = scrumsalto
 
         def scrumsalto2():
             scrumwindow = tk.Toplevel()
+            self.master.withdraw()
             app = progress(scrumwindow)
         
         self.InPro['command'] = scrumsalto2
 
         def scrumsalto3():
             scrumwindow = tk.Toplevel()
+            self.master.withdraw()
             app = done(scrumwindow)
         
         self.Done['command'] = scrumsalto3
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = py_mainformpro.proyectos(scrumwindow)
+
+        self.Vl['command'] = volver
