@@ -146,6 +146,8 @@ class sb:
         self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
 
+        # ------- VOLVER -------- #
+
         self.Vl = tk.Button(
             self.master,
             text=" PROYECTOS ",

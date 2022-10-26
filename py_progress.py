@@ -115,6 +115,8 @@ class progress:
         self.InProEspa.place(rely=0.4, relx=0.3, anchor=CENTER)
         self.InProEspa2.place(rely=0.4, relx=0.7, anchor=CENTER)
 
+        # ------- VOLVER -------- #
+
         self.Vl = tk.Button(
             self.master,
             text=" VOLVER ",
