@@ -35,17 +35,6 @@ class progress:
         # ------------------------------ #
 
         self.master.config(menu=self.menubar, bg="#9E91E9")
-        self.Vl = tk.Button(
-            self.master,
-            text=" VOLVER ",
-            padx=50,
-            pady=5,
-            fg="black",
-            font=("Orbitron", 18),
-            width=7,
-        )
-        self.Vl.pack()
-        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         # -------- TITULO -------------- #
 
@@ -125,6 +114,18 @@ class progress:
         self.InProframe.place(rely=0.06, relx=0.5, anchor=CENTER)
         self.InProEspa.place(rely=0.4, relx=0.3, anchor=CENTER)
         self.InProEspa2.place(rely=0.4, relx=0.7, anchor=CENTER)
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" VOLVER ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         def volver():
             scrumwindow = tk.Toplevel()

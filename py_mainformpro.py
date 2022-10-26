@@ -20,17 +20,6 @@ class proyectos:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
-        self.sec = tk.Button(
-            self.master,
-            text=" CERRAR SESIÓN ",
-            padx=50,
-            pady=5,
-            fg="black",
-            font=("Orbitron", 18),
-            width=7,
-        )
-        self.sec.pack()
-        self.sec.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         # -------- TITULO -------------- #
 
@@ -138,6 +127,18 @@ class proyectos:
         self.PY3.pack()
         self.PY3Cua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.PY3frame.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        self.sec = tk.Button(
+            self.master,
+            text=" CERRAR SESIÓN ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=8,
+        )
+        self.sec.pack()
+        self.sec.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         def scrumsalto():
             scrumwindow = tk.Toplevel()

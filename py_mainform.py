@@ -38,17 +38,6 @@ class sb:
         # ------------------------------ #
 
         self.master.config(menu=self.menubar, bg="#9E91E9")
-        self.Vl = tk.Button(
-            self.master,
-            text=" PROYECTOS ",
-            padx=50,
-            pady=5,
-            fg="black",
-            font=("Orbitron", 18),
-            width=7,
-        )
-        self.Vl.pack()
-        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         # -------- TITULO -------------- #
 
@@ -156,6 +145,18 @@ class sb:
         self.Done.pack()
         self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" PROYECTOS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         def scrumsalto():
             scrumwindow = tk.Toplevel()
