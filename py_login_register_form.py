@@ -97,7 +97,6 @@ username_label = tk.Label(
 password_label = tk.Label(
     login_contentframe, text="Contraseña:", font=("Orbitron", 16), bg=bgcolor
 )
-
 username_entry = tk.Entry(login_contentframe, font=("Orbitron", 16))
 password_entry = tk.Entry(login_contentframe, font=("Orbitron", 16), show="*")
 
@@ -121,7 +120,7 @@ go_register_label = tk.Label(
 )
 
 mainframe.pack(fill="both", expand=1)
-loginframe.pack(fill="both", expand=1)
+loginframe.pack(fill="both", expand=1) 
 login_contentframe.pack(fill="both", expand=1)
 
 username_label.grid(row=0, column=0, pady=10)
@@ -330,7 +329,7 @@ def register():
     phone = phone_entry_rg.get().strip()
     gdr = gender.get()
 
-    if len(fullname) > 0 and len(username) > 0 and len(password) > 0 and len(phone) > 0:
+    if len(fullname) > 0 and len(username) > 0 and len(password) > 0 and len(phone) > 0 and len(email) > 0:
         if check_username(username) == False:
             if password:
                 vals = (fullname, username, password, phone, surname, gdr, email)

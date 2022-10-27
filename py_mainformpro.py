@@ -145,6 +145,10 @@ class proyectos:
             self.master.withdraw()
             app = py_mainform.sb(scrumwindow)
 
+        def cerrar():
+            self.master.destroy()
+
+        self.sec["command"] = cerrar
         self.PY1["command"] = scrumsalto
         self.PY2["command"] = scrumsalto
         self.PY3["command"] = scrumsalto
