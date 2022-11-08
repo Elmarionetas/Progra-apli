@@ -6,14 +6,13 @@ from tkinter import filedialog
 from tkinter import messagebox
 
 # import mysql.connector
-from py_mainformpro import proyectos
 import psycopg2
 
 root = Tk()
 # connection = mysql.connector.connect(host='localhost', user='root', port='3306', password='', database='py_lg_rg_db')
 # conexion = psycopg2.connect(host='localhost',database='aplicada', user='postgresql', password='Martin123')
 connection = psycopg2.connect(
-    host="localhost", user="postgres", password="1962", database="aplicada"
+    host="localhost", user="postgres", password="1962", database="SCRUMBASE"
 )
 
 root.title("ScrumBase")
@@ -120,7 +119,7 @@ go_register_label = tk.Label(
 )
 
 mainframe.pack(fill="both", expand=1)
-loginframe.pack(fill="both", expand=1) 
+loginframe.pack(fill="both", expand=1)
 login_contentframe.pack(fill="both", expand=1)
 
 username_label.grid(row=0, column=0, pady=10)
@@ -152,7 +151,7 @@ def login():
         username,
         password,
     )
-    select_query = "SELECT * FROM users WHERE username = %s and password = %s"
+    select_query = "SELECT * FROM USUARIOS WHERE username = %s and password = %s"
     c.execute(select_query, vals)
     user = c.fetchone()
     if user is not None:
@@ -203,6 +202,9 @@ gender_label_rg = tk.Label(
 email_label_rg = tk.Label(
     register_contentframe, text="Correo:", font=("Orbitron", 14), bg=bgcolor
 )
+cedula_label_rg = tk.Label(
+    register_contentframe, text="Cedula:", font=("Orbitron", 14), bg=bgcolor
+)
 
 
 fullname_entry_rg = tk.Entry(register_contentframe, font=("Orbitron", 14), width=22)
@@ -213,6 +215,7 @@ password_entry_rg = tk.Entry(
 )
 phone_entry_rg = tk.Entry(register_contentframe, font=("Orbitron", 14), width=22)
 email_entry_rg = tk.Entry(register_contentframe, font=("Orbitron", 14), width=22)
+cedula_entry_rg = tk.Entry(register_contentframe, font=("Orbitron", 14), width=22)
 
 
 radiosframe = tk.Frame(register_contentframe)
@@ -277,15 +280,18 @@ phone_entry_rg.grid(row=4, column=1)
 email_label_rg.grid(row=5, column=0, pady=5, sticky="e")
 email_entry_rg.grid(row=5, column=1)
 
-gender_label_rg.grid(row=6, column=0, pady=5, sticky="e")
-radiosframe.grid(row=6, column=1)
+cedula_label_rg.grid(row=6, column=0, pady=5, sticky="e")
+cedula_entry_rg.grid(row=6, column=1)
+
+gender_label_rg.grid(row=7, column=0, pady=5, sticky="e")
+radiosframe.grid(row=7, column=1)
 male_radiobutton.grid(row=0, column=0)
 female_radiobutton.grid(row=0, column=1)
 
 
-register_button.grid(row=7, column=0, columnspan=2, pady=20)
+register_button.grid(row=8, column=0, columnspan=2, pady=20)
 
-go_login_label.grid(row=8, column=0, columnspan=2, pady=10)
+go_login_label.grid(row=9, column=0, columnspan=2, pady=10)
 
 
 # --------------------------------------- #
@@ -306,7 +312,7 @@ go_login_label.bind("<Button-1>", lambda page: go_to_login())
 def check_username(username):
     username = username_entry_rg.get().strip()
     vals = (username,)
-    select_query = "SELECT * FROM users WHERE username = %s"
+    select_query = "SELECT * FROM USUARIOS WHERE username = %s"
     c.execute(select_query, vals)
     user = c.fetchone()
     if user is not None:
@@ -328,12 +334,28 @@ def register():
     email = email_entry_rg.get().strip()
     phone = phone_entry_rg.get().strip()
     gdr = gender.get()
+    cedula = cedula_entry_rg.get().strip()
 
-    if len(fullname) > 0 and len(username) > 0 and len(password) > 0 and len(phone) > 0 and len(email) > 0:
+    if (
+        len(fullname) > 0
+        and len(username) > 0
+        and len(password) > 0
+        and len(phone) > 0
+        and len(email) > 0
+    ):
         if check_username(username) == False:
             if password:
-                vals = (fullname, username, password, phone, surname, gdr, email)
-                insert_query = "INSERT INTO users(fullname, username, password, phone, surname, gender, email) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+                vals = (
+                    fullname,
+                    username,
+                    password,
+                    phone,
+                    surname,
+                    gdr,
+                    email,
+                    cedula,
+                )
+                insert_query = "INSERT INTO USUARIOS(fullname, username, password, phone, surname, gender, email, cedula) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
                 c.execute(insert_query, vals)
                 connection.commit()
                 messagebox.showinfo("Enhorabuena", "Tu cuenta ha sido creada")
@@ -349,8 +371,750 @@ def register():
 
 register_button["command"] = register
 
-# --------------------------------------- #
+# ------------------------------------------------------------------------ #
+
+
+class sb:
+    def __init__(self, master):
+
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ----------- MENU ------------- #
+
+        self.frame = tk.Frame(self.master)
+        self.menubar = Menu(self.frame)
+        self.products = Menu(self.menubar, tearoff=0)
+        self.products.add_command(label="Proyectos")
+        self.products.add_command(label="Scrum Board")
+        self.products.add_command(label="To do")
+        self.products.add_command(label="In progres")
+        self.products.add_command(label="Done")
+
+        self.menubar.add_cascade(menu=self.products, label="Menu")
+
+        self.frame.pack()
+
+        # ------------------------------ #
+
+        self.master.config(menu=self.menubar, bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.header = tk.Frame(
+            self.master,
+            highlightbackground="#9E91E9",
+            highlightcolor="#9E91E9",
+            highlightthickness=2,
+            bg="#9E91E9",
+            width=ws,
+            height=70,
+        )
+        self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text=" SCRUM BOARD ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+        # -------- TO DO ------------- #
+
+        self.ToDoCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.ToDoframe = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
+        self.toDo = tk.Button(
+            self.ToDoframe,
+            text="TO DO",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.ToDoCua.pack()
+        self.ToDoframe.pack()
+        self.toDo.pack()
+        self.ToDoCua.place(rely=0.52, relx=0.2, anchor=CENTER)
+        self.ToDoframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        # ----- IN PROGRESS ------ #
+
+        self.InProCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.InProframe = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
+        self.InPro = tk.Button(
+            self.InProframe,
+            text="IN PROGRESS",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.InProCua.pack()
+        self.InProframe.pack()
+        self.InPro.pack()
+        self.InProCua.place(rely=0.52, relx=0.5, anchor=CENTER)
+        self.InProframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        # ------- DONE -------- #
+
+        self.DoneCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.Doneframe = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
+        self.Done = tk.Button(
+            self.Doneframe,
+            text="DONE",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.DoneCua.pack()
+        self.Doneframe.pack()
+        self.Done.pack()
+        self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
+        self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" PROYECTOS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def scrumsalto():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = todo(scrumwindow)
+
+        self.toDo["command"] = scrumsalto
+
+        def scrumsalto2():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = progress(scrumwindow)
+
+        self.InPro["command"] = scrumsalto2
+
+        def scrumsalto3():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = done(scrumwindow)
+
+        self.Done["command"] = scrumsalto3
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = proyectos(scrumwindow)
+
+        self.Vl["command"] = volver
+
 
 # ------------------------------------------------------------------------ #
+
+
+class proyectos:
+    def __init__(self, master):
+
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ------------------------------ #
+
+        self.master.config(bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.header = tk.Frame(
+            self.master,
+            highlightbackground="#9E91E9",
+            highlightcolor="#9E91E9",
+            highlightthickness=2,
+            bg="#9E91E9",
+            width=ws,
+            height=70,
+        )
+        self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text=" PROYECTOS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+        # ------- PROYECTO 1 --------- #
+
+        self.PY1Cua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
+        self.PY1 = tk.Button(
+            self.PY1frame,
+            text=" PROYECTO 1 ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.PY1Cua.pack()
+        self.PY1frame.pack()
+        self.PY1.pack()
+        self.PY1Cua.place(rely=0.52, relx=0.2, anchor=CENTER)
+        self.PY1frame.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        # ------- PROYECTO 2 --------- #
+
+        self.PY2Cua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.PY2frame = tk.Frame(self.PY2Cua, bg="#9E91E9", padx=1, pady=1)
+        self.PY2 = tk.Button(
+            self.PY2frame,
+            text=" PROYECTO 2 ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.PY2Cua.pack()
+        self.PY2frame.pack()
+        self.PY2.pack()
+        self.PY2Cua.place(rely=0.52, relx=0.5, anchor=CENTER)
+        self.PY2frame.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        # ------- PROYECTO 3 -------- #
+
+        self.PY3Cua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=450,
+            height=800,
+        )
+        self.PY3frame = tk.Frame(self.PY3Cua, bg="#9E91E9", padx=1, pady=1)
+        self.PY3 = tk.Button(
+            self.PY3frame,
+            text=" PROYECTO 3 ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.PY3Cua.pack()
+        self.PY3frame.pack()
+        self.PY3.pack()
+        self.PY3Cua.place(rely=0.52, relx=0.8, anchor=CENTER)
+        self.PY3frame.place(rely=0.06, relx=0.5, anchor=CENTER)
+
+        self.sec = tk.Button(
+            self.master,
+            text=" CERRAR SESIÓN ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=8,
+        )
+        self.sec.pack()
+        self.sec.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def scrumsalto():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = sb(scrumwindow)
+
+        def cerrar():
+            self.master.destroy()
+
+        self.sec["command"] = cerrar
+        self.PY1["command"] = scrumsalto
+        self.PY2["command"] = scrumsalto
+        self.PY3["command"] = scrumsalto
+
+
+# ------------------------------------------------------------------------ #
+
+
+class progress:
+    def __init__(self, master):
+
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ----------- MENU ------------- #
+
+        self.frame = tk.Frame(self.master)
+        self.menubar = Menu(self.frame)
+        self.products = Menu(self.menubar, tearoff=0)
+        self.products.add_command(label="Proyectos")
+        self.products.add_command(label="Scrum Board")
+        self.products.add_command(label="To do")
+        self.products.add_command(label="In progres")
+        self.products.add_command(label="Done")
+
+        self.menubar.add_cascade(menu=self.products, label="Menu")
+
+        self.frame.pack()
+
+        # ------------------------------ #
+
+        self.master.config(menu=self.menubar, bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.header = tk.Frame(
+            self.master,
+            highlightbackground="#9E91E9",
+            highlightcolor="#9E91E9",
+            highlightthickness=2,
+            bg="#9E91E9",
+            width=ws,
+            height=70,
+        )
+        self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text=" SCRUM BOARD ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+        # -------- IN PROGRESS ------------- #
+
+        self.InProCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=ws - 250,
+            height=800,
+        )
+        self.InProframe = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
+        self.InPro = tk.Label(
+            self.InProframe,
+            text=" PROGRESS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.InProEspa = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
+        self.InProEspa1 = tk.Label(
+            self.InProEspa,
+            text=" EN PROGRESO 1 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.InProEspa2 = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
+        self.InProEspa3 = tk.Label(
+            self.InProEspa2,
+            text=" EN PROGRESO 2 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.InProCua.pack()
+        self.InProframe.pack()
+        self.InPro.pack()
+        self.InProEspa.pack()
+        self.InProEspa1.pack()
+        self.InProEspa2.pack()
+        self.InProEspa3.pack()
+        self.InProCua.place(rely=0.52, relx=0.5, anchor=CENTER)
+        self.InProframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.InProEspa.place(rely=0.4, relx=0.3, anchor=CENTER)
+        self.InProEspa2.place(rely=0.4, relx=0.7, anchor=CENTER)
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" VOLVER ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = sb(scrumwindow)
+
+        self.Vl["command"] = volver
+
+
+# ------------------------------------------------------------------------ #
+
+
+class todo:
+    def __init__(self, master):
+
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ----------- MENU ------------- #
+
+        self.frame = tk.Frame(self.master)
+        self.menubar = Menu(self.frame)
+        self.products = Menu(self.menubar, tearoff=0)
+        self.products.add_command(label="Proyectos")
+        self.products.add_command(label="Scrum Board")
+        self.products.add_command(label="To do")
+        self.products.add_command(label="In progres")
+        self.products.add_command(label="Done")
+
+        self.menubar.add_cascade(menu=self.products, label="Menu")
+
+        self.frame.pack()
+
+        # ------------------------------ #
+
+        self.master.config(menu=self.menubar, bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.header = tk.Frame(
+            self.master,
+            highlightbackground="#9E91E9",
+            highlightcolor="#9E91E9",
+            highlightthickness=2,
+            bg="#9E91E9",
+            width=ws,
+            height=70,
+        )
+        self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text=" SCRUM BOARD ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+        # -------- TO DO ------------- #
+
+        self.ToDoCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=ws - 250,
+            height=800,
+        )
+        self.ToDoframe = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
+        self.toDo = tk.Label(
+            self.ToDoframe,
+            text=" TO DO ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 25),
+            width=10,
+        )
+        self.ToDoEspa = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
+        self.ToDoEspa1 = tk.Label(
+            self.ToDoEspa,
+            text=" HISTORIA DE USUARIO 1 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.ToDoEspa2 = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
+        self.ToDoEspa3 = tk.Label(
+            self.ToDoEspa2,
+            text=" HISTORIA DE USUARIO 2 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.ToDoCua.pack()
+        self.ToDoframe.pack()
+        self.toDo.pack()
+        self.ToDoEspa.pack()
+        self.ToDoEspa1.pack()
+        self.ToDoEspa2.pack()
+        self.ToDoEspa3.pack()
+        self.ToDoCua.place(rely=0.52, relx=0.5, anchor=CENTER)
+        self.ToDoframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.ToDoEspa.place(rely=0.4, relx=0.3, anchor=CENTER)
+        self.ToDoEspa2.place(rely=0.4, relx=0.7, anchor=CENTER)
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" VOLVER ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = sb(scrumwindow)
+
+        self.Vl["command"] = volver
+
+
+# ------------------------------------------------------------------------ #
+
+
+class done:
+    def __init__(self, master):
+
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ----------- MENU ------------- #
+
+        self.frame = tk.Frame(self.master)
+        self.menubar = Menu(self.frame)
+        self.products = Menu(self.menubar, tearoff=0)
+        self.products.add_command(label="Proyectos")
+        self.products.add_command(label="Scrum Board")
+        self.products.add_command(label="To do")
+        self.products.add_command(label="In progres")
+        self.products.add_command(label="Done")
+
+        self.menubar.add_cascade(menu=self.products, label="Menu")
+
+        self.frame.pack()
+
+        # ------------------------------ #
+
+        self.master.config(menu=self.menubar, bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.header = tk.Frame(
+            self.master,
+            highlightbackground="#9E91E9",
+            highlightcolor="#9E91E9",
+            highlightthickness=2,
+            bg="#9E91E9",
+            width=ws,
+            height=70,
+        )
+        self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text=" SCRUM BOARD ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.header.pack()
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
+
+        # -------- TO DO ------------- #
+
+        self.DoneCua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=ws - 250,
+            height=800,
+        )
+        self.Doneframe = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
+        self.Done = tk.Label(
+            self.Doneframe,
+            text=" DONE ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.DoneEspa = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
+        self.DoneEspa1 = tk.Label(
+            self.DoneEspa,
+            text=" TERMINADO 1 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.DoneEspa2 = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
+        self.DoneEspa3 = tk.Label(
+            self.DoneEspa2,
+            text=" TERMINADO 2 ",
+            padx=150,
+            pady=150,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+        self.DoneCua.pack()
+        self.Doneframe.pack()
+        self.Done.pack()
+        self.DoneEspa.pack()
+        self.DoneEspa1.pack()
+        self.DoneEspa2.pack()
+        self.DoneEspa3.pack()
+        self.DoneCua.place(rely=0.52, relx=0.5, anchor=CENTER)
+        self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.DoneEspa.place(rely=0.4, relx=0.3, anchor=CENTER)
+        self.DoneEspa2.place(rely=0.4, relx=0.7, anchor=CENTER)
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" VOLVER ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = sb(scrumwindow)
+
+        self.Vl["command"] = volver
+
 
 root.mainloop()
