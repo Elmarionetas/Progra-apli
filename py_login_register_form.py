@@ -8,6 +8,7 @@ from tkinter import messagebox
 # import mysql.connector
 import psycopg2
 
+user = "fofia"
 root = Tk()
 # connection = mysql.connector.connect(host='localhost', user='root', port='3306', password='', database='py_lg_rg_db')
 # conexion = psycopg2.connect(host='localhost',database='aplicada', user='postgresql', password='Martin123')
@@ -147,6 +148,7 @@ go_register_label.bind("<Button-1>", lambda page: go_to_register())
 def login():
     username = username_entry.get().strip()
     password = password_entry.get().strip()
+    globals()["user"] = username
     vals = (
         username,
         password,
@@ -575,6 +577,27 @@ class proyectos:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        c.execute("select cedula from usuarios where username = %s", (user,))
+        ce = c.fetchone()
+        c.execute("select proyect from proyectos where cedula = %s", (ce,))
+        s = c.fetchall()
+        if c.rowcount == 0:
+            s1 = "P"
+            s2 = "P"
+            s3 = "P"
+        elif c.rowcount == 1:
+            s1 = s[0]
+            s2 = "P"
+            s3 = "P"
+        elif c.rowcount == 2:
+            s1 = s[0]
+            s2 = s[1]
+            s3 = "P"
+        elif c.rowcount == 3:
+            s1 = s[0]
+            s2 = s[1]
+            s3 = s[3]            
+        print(s)
 
         # -------- TITULO -------------- #
 
@@ -616,7 +639,7 @@ class proyectos:
         self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
         self.PY1 = tk.Button(
             self.PY1frame,
-            text=" PROYECTO 1 ",
+            text="\n".join("".join(map(str, tup)) for tup in s1),
             padx=50,
             pady=5,
             fg="black",
@@ -643,7 +666,7 @@ class proyectos:
         self.PY2frame = tk.Frame(self.PY2Cua, bg="#9E91E9", padx=1, pady=1)
         self.PY2 = tk.Button(
             self.PY2frame,
-            text=" PROYECTO 2 ",
+            text="\n".join("".join(map(str, tup)) for tup in s2),
             padx=50,
             pady=5,
             fg="black",
@@ -670,7 +693,7 @@ class proyectos:
         self.PY3frame = tk.Frame(self.PY3Cua, bg="#9E91E9", padx=1, pady=1)
         self.PY3 = tk.Button(
             self.PY3frame,
-            text=" PROYECTO 3 ",
+            text="\n".join("".join(map(str, tup)) for tup in s3),
             padx=50,
             pady=5,
             fg="black",
@@ -743,7 +766,7 @@ class progress:
         # ------------------------------ #
 
         self.master.config(menu=self.menubar, bg="#9E91E9")
-
+        
         # -------- TITULO -------------- #
 
         self.header = tk.Frame(
@@ -930,7 +953,7 @@ class todo:
         self.ToDoEspa = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
         self.ToDoEspa1 = tk.Label(
             self.ToDoEspa,
-            text=" HISTORIA DE USUARIO 1 ",
+            text="TO DO 1",
             padx=150,
             pady=150,
             fg="black",
@@ -940,7 +963,7 @@ class todo:
         self.ToDoEspa2 = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
         self.ToDoEspa3 = tk.Label(
             self.ToDoEspa2,
-            text=" HISTORIA DE USUARIO 2 ",
+            text="TO DO 2",
             padx=150,
             pady=150,
             fg="black",
@@ -1042,7 +1065,7 @@ class done:
         self.lbl.pack()
         self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
 
-        # -------- TO DO ------------- #
+        # -------- TERMINADO ------------- #
 
         self.DoneCua = tk.Frame(
             self.master,
