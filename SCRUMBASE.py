@@ -4,11 +4,13 @@ from tkinter import ttk
 from tkinter.ttk import *
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter.font import Font
 
 # import mysql.connector
 import psycopg2
 
 user = "fofia"
+cedula = "1"
 root = Tk()
 connection = psycopg2.connect(
     host="localhost", user="postgres", password="1962", database="SCRUMBASE"
@@ -133,6 +135,7 @@ def go_to_register():
     title_label["text"] = " REGISTRO "
     # title_label['bg'] = '#27ae60'
 
+
 go_register_label.bind("<Button-1>", lambda page: go_to_register())
 
 
@@ -157,6 +160,7 @@ def login():
 
     else:
         messagebox.showwarning("Error", "Usuario o contraseña errada")
+
 
 login_button["command"] = login
 
@@ -413,6 +417,7 @@ class proyectos:
 
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
+        globals()["cedula"] = ce
         c.execute("select proyect from proyectos where cedula = %s", (ce,))
         s = c.fetchall()
 
@@ -503,7 +508,7 @@ class proyectos:
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (3, ce, 1),
             )
-            done  = c.fetchall()
+            done = c.fetchall()
             self.done = tk.Label(
                 self.PY1Cua,
                 text="\n".join("".join(map(str, tup)) for tup in done),
@@ -525,7 +530,6 @@ class proyectos:
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
-
 
         elif c.rowcount == 2:
 
@@ -550,27 +554,63 @@ class proyectos:
                 font=("Orbitron", 25),
                 width=10,
             )
+
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (1, ce, 1),
             )
-            todo1 = c.fetchall()
+            todo = c.fetchall()
             self.todo = tk.Label(
                 self.PY1Cua,
-                text="\n".join("".join(map(str, tup)) for tup in todo1),
+                text="\n".join("".join(map(str, tup)) for tup in todo),
                 padx=100,
                 pady=10,
                 fg="black",
                 font=("Orbitron", 20),
                 width=10,
             )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, 1),
+            )
+            inpro = c.fetchall()
+            self.inpro = tk.Label(
+                self.PY1Cua,
+                text="\n".join("".join(map(str, tup)) for tup in inpro),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (3, ce, 1),
+            )
+            done = c.fetchall()
+            self.done = tk.Label(
+                self.PY1Cua,
+                text="\n".join("".join(map(str, tup)) for tup in done),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
             self.PY1Cua.pack()
             self.PY1frame.pack()
             self.PY1.pack()
             self.todo.pack()
+            self.inpro.pack()
+            self.done.pack()
             self.PY1Cua.place(rely=0.52, relx=0.3, anchor=CENTER)
             self.PY1frame.place(rely=0.07, relx=0.5, anchor=CENTER)
-            self.todo.place(rely=0.2, relx=0.5, anchor=CENTER)
+            self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
+            self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
+            self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
             # ------- PROYECTO 2 --------- #
 
@@ -583,37 +623,73 @@ class proyectos:
                 width=600,
                 height=800,
             )
-            self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
-            self.PY1 = tk.Button(
-                self.PY1frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[0]),
+            self.PY2frame = tk.Frame(self.PY2Cua, bg="#9E91E9", padx=1, pady=1)
+            self.PY2 = tk.Button(
+                self.PY2frame,
+                text="\n".join("".join(map(str, tup)) for tup in s[1]),
                 padx=50,
                 pady=5,
                 fg="black",
                 font=("Orbitron", 25),
                 width=10,
             )
+
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce, 1),
+                (1, ce, 2),
             )
-            todo1 = c.fetchall()
+            todo = c.fetchall()
             self.todo = tk.Label(
-                self.PY1Cua,
-                text="\n".join("".join(map(str, tup)) for tup in todo1),
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in todo),
                 padx=100,
                 pady=10,
                 fg="black",
                 font=("Orbitron", 20),
                 width=10,
             )
-            self.PY1Cua.pack()
-            self.PY1frame.pack()
-            self.PY1.pack()
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, 2),
+            )
+            inpro = c.fetchall()
+            self.inpro = tk.Label(
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in inpro),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (3, ce, 2),
+            )
+            done = c.fetchall()
+            self.done = tk.Label(
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in done),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            self.PY2Cua.pack()
+            self.PY2frame.pack()
+            self.PY2.pack()
             self.todo.pack()
-            self.PY1Cua.place(rely=0.52, relx=0.5, anchor=CENTER)
-            self.PY1frame.place(rely=0.07, relx=0.5, anchor=CENTER)
-            self.todo.place(rely=0.2, relx=0.5, anchor=CENTER)
+            self.inpro.pack()
+            self.done.pack()
+            self.PY2Cua.place(rely=0.52, relx=0.5, anchor=CENTER)
+            self.PY2frame.place(rely=0.07, relx=0.5, anchor=CENTER)
+            self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
+            self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
+            self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
         elif c.rowcount == 3:
 
@@ -638,27 +714,63 @@ class proyectos:
                 font=("Orbitron", 25),
                 width=10,
             )
+
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (1, ce, 1),
             )
-            todo1 = c.fetchall()
+            todo = c.fetchall()
             self.todo = tk.Label(
                 self.PY1Cua,
-                text="\n".join("".join(map(str, tup)) for tup in todo1),
+                text="\n".join("".join(map(str, tup)) for tup in todo),
                 padx=100,
                 pady=10,
                 fg="black",
                 font=("Orbitron", 20),
                 width=10,
             )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, 1),
+            )
+            inpro = c.fetchall()
+            self.inpro = tk.Label(
+                self.PY1Cua,
+                text="\n".join("".join(map(str, tup)) for tup in inpro),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (3, ce, 1),
+            )
+            done = c.fetchall()
+            self.done = tk.Label(
+                self.PY1Cua,
+                text="\n".join("".join(map(str, tup)) for tup in done),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
             self.PY1Cua.pack()
             self.PY1frame.pack()
             self.PY1.pack()
             self.todo.pack()
+            self.inpro.pack()
+            self.done.pack()
             self.PY1Cua.place(rely=0.52, relx=0.2, anchor=CENTER)
             self.PY1frame.place(rely=0.07, relx=0.5, anchor=CENTER)
-            self.todo.place(rely=0.2, relx=0.5, anchor=CENTER)
+            self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
+            self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
+            self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
             # ------- PROYECTO 2 --------- #
 
@@ -681,11 +793,63 @@ class proyectos:
                 font=("Orbitron", 25),
                 width=10,
             )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (1, ce, 2),
+            )
+            todo = c.fetchall()
+            self.todo = tk.Label(
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in todo),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, 2),
+            )
+            inpro = c.fetchall()
+            self.inpro = tk.Label(
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in inpro),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (3, ce, 2),
+            )
+            done = c.fetchall()
+            self.done = tk.Label(
+                self.PY2Cua,
+                text="\n".join("".join(map(str, tup)) for tup in done),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
             self.PY2Cua.pack()
             self.PY2frame.pack()
             self.PY2.pack()
+            self.todo.pack()
+            self.inpro.pack()
+            self.done.pack()
             self.PY2Cua.place(rely=0.52, relx=0.5, anchor=CENTER)
             self.PY2frame.place(rely=0.07, relx=0.5, anchor=CENTER)
+            self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
+            self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
+            self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
             # ------- PROYECTO 3 -------- #
 
@@ -708,11 +872,62 @@ class proyectos:
                 font=("Orbitron", 25),
                 width=10,
             )
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (1, ce, 3),
+            )
+            todo = c.fetchall()
+            self.todo = tk.Label(
+                self.PY3Cua,
+                text="\n".join("".join(map(str, tup)) for tup in todo),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, 3),
+            )
+            inpro = c.fetchall()
+            self.inpro = tk.Label(
+                self.PY3Cua,
+                text="\n".join("".join(map(str, tup)) for tup in inpro),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
+            c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (3, ce, 3),
+            )
+            done = c.fetchall()
+            self.done = tk.Label(
+                self.PY3Cua,
+                text="\n".join("".join(map(str, tup)) for tup in done),
+                padx=100,
+                pady=10,
+                fg="black",
+                font=("Orbitron", 20),
+                width=10,
+            )
+
             self.PY3Cua.pack()
             self.PY3frame.pack()
             self.PY3.pack()
+            self.todo.pack()
+            self.inpro.pack()
+            self.done.pack()
             self.PY3Cua.place(rely=0.52, relx=0.8, anchor=CENTER)
             self.PY3frame.place(rely=0.07, relx=0.5, anchor=CENTER)
+            self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
+            self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
+            self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
         print(s)
 
         self.sec = tk.Button(
@@ -727,6 +942,18 @@ class proyectos:
         self.sec.pack()
         self.sec.place(rely=0.04, relx=0.92, anchor=CENTER)
 
+        self.proy = tk.Button(
+            self.master,
+            text=" ADMINISTRAR PROYECTOS ",
+            padx=125,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=8,
+        )
+        self.proy.pack()
+        self.proy.place(rely=0.04, relx=0.12, anchor=CENTER)
+
         def scrumsalto():
             scrumwindow = tk.Toplevel()
             self.master.withdraw()
@@ -735,10 +962,16 @@ class proyectos:
         def cerrar():
             self.master.destroy()
 
+        def proyectos():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = modicrea(scrumwindow)
+
         self.sec["command"] = cerrar
         self.PY1["command"] = scrumsalto
         self.PY2["command"] = scrumsalto
         self.PY3["command"] = scrumsalto
+        self.proy["command"] = proyectos
 
 
 # ------------------------------------------------------------------------ #
@@ -788,6 +1021,7 @@ class sb:
             height=70,
         )
         self.titleframe = tk.Frame(self.header, bg="#9E91E9", padx=1, pady=1)
+
         self.lbl = tk.Label(
             self.titleframe,
             text=" SCRUM BOARD ",
@@ -797,6 +1031,7 @@ class sb:
             font=("Orbitron", 25),
             width=10,
         )
+
         self.header.pack()
         self.titleframe.pack()
         self.lbl.pack()
@@ -1332,6 +1567,105 @@ class done:
             app = sb(scrumwindow)
 
         self.Vl["command"] = volver
+
+
+class modicrea:
+    def __init__(self, master):
+
+        # ----------- Register Page ------------- #
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ------------------------------ #
+
+        self.master.config(bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.Pycua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=1300,
+            height=700,
+        )
+
+        self.framepy = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbpy = tk.Label(
+            self.framepy,
+            text="Proyecto: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 15),
+            width=10,
+        )
+
+        self.py_entry = tk.Text(self.Pycua, font=("Orbitron", 14))
+
+        self.frameusu = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbusu = tk.Label(
+            self.frameusu,
+            text="Usuario: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 15),
+            width=10,
+        )
+
+        c.execute("select username from usuarios")
+        usuarios = c.fetchall()
+        for n in range(0, c.rowcount):
+            self.usuario = ttk.Combobox(
+                self.Pycua, values=usuarios[n], font=Font(size=15),state="readonly"
+            )
+
+        self.boton = tk.Button(
+            self.Pycua,
+            text="Guardar",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        textopy = self.py_entry.get("1.0",END)
+        usupy = self.usuario.get()
+        print (usupy)
+        c.execute("select cedula from usuarios where username = %s", (usupy,))
+        cepy = c.fetchone()
+
+        self.Pycua.pack()
+        self.framepy.pack()
+        self.lbpy.pack()
+        self.py_entry.pack()
+        self.frameusu.pack()
+        self.lbusu.pack()
+        self.usuario.pack()
+        self.boton.pack()
+        self.Pycua.place(rely=0.5, relx=0.5, anchor=CENTER)
+        self.framepy.place(rely=0.2, relx=0.1, anchor=CENTER)
+        self.py_entry.place(rely=0.3, relx=0.5, anchor=CENTER, width=600, height=200)
+        self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
+        self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
+        self.boton.place(rely=0.7, relx=0.5, anchor=CENTER)
+
+        def guardar():
+            c.execute("insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)", (cepy,textopy,1))
+
+        self.boton["command"] = guardar
+
 
 
 root.mainloop()
