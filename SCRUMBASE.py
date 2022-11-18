@@ -5,6 +5,7 @@ from tkinter.ttk import *
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.font import Font
+import numpy as np
 
 # import mysql.connector
 import psycopg2
@@ -413,6 +414,11 @@ class proyectos:
         self.lbl.pack()
         self.titleframe.place(rely=0.5, relx=0.5, anchor=CENTER)
 
+        def scrumsalto():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = sb(scrumwindow)
+
         # -------- PROYECTOS ----------- #
 
         c.execute("select cedula from usuarios where username = %s", (user,))
@@ -530,6 +536,7 @@ class proyectos:
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
+            self.PY1["command"] = scrumsalto
 
         elif c.rowcount == 2:
 
@@ -685,11 +692,13 @@ class proyectos:
             self.todo.pack()
             self.inpro.pack()
             self.done.pack()
-            self.PY2Cua.place(rely=0.52, relx=0.5, anchor=CENTER)
+            self.PY2Cua.place(rely=0.52, relx=0.7, anchor=CENTER)
             self.PY2frame.place(rely=0.07, relx=0.5, anchor=CENTER)
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
+            self.PY1["command"] = scrumsalto
+            self.PY2["command"] = scrumsalto
 
         elif c.rowcount == 3:
 
@@ -928,6 +937,10 @@ class proyectos:
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
+
+            self.PY1["command"] = scrumsalto
+            self.PY2["command"] = scrumsalto
+            self.PY3["command"] = scrumsalto
         print(s)
 
         self.sec = tk.Button(
@@ -954,11 +967,6 @@ class proyectos:
         self.proy.pack()
         self.proy.place(rely=0.04, relx=0.12, anchor=CENTER)
 
-        def scrumsalto():
-            scrumwindow = tk.Toplevel()
-            self.master.withdraw()
-            app = sb(scrumwindow)
-
         def cerrar():
             self.master.destroy()
 
@@ -968,9 +976,6 @@ class proyectos:
             app = modicrea(scrumwindow)
 
         self.sec["command"] = cerrar
-        self.PY1["command"] = scrumsalto
-        self.PY2["command"] = scrumsalto
-        self.PY3["command"] = scrumsalto
         self.proy["command"] = proyectos
 
 
@@ -1468,7 +1473,7 @@ class done:
 
         self.master.config(menu=self.menubar, bg="#9E91E9")
 
-        # -------- TITULO -------------- #
+        # ---------- TITULO ------------ #
 
         self.header = tk.Frame(
             self.master,
@@ -1595,9 +1600,24 @@ class modicrea:
             highlightcolor="#ECDAFB",
             highlightthickness=2,
             bg="#ECDAFB",
-            width=1300,
+            width=ws - 200,
             height=700,
         )
+
+        self.titleframe = tk.Frame(self.master, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text="ADMINISTRAR PROYECTOS",
+            padx=150,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.titleframe.place(rely=0.05, relx=0.5, anchor=CENTER)
 
         self.framepy = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
         self.lbpy = tk.Label(
@@ -1627,8 +1647,15 @@ class modicrea:
         usuarios = c.fetchall()
         for n in range(0, c.rowcount):
             self.usuario = ttk.Combobox(
-                self.Pycua, values=usuarios[n], font=Font(size=15),state="readonly"
+                self.Pycua,
+                values=usuarios[0] + usuarios[n],
+                font=Font(size=15),
+                state="readonly",
             )
+
+        self.pyidlista = ttk.Combobox(
+            self.Pycua, values=["1", "2", "3"], font=Font(size=15), state="readonly"
+        )
 
         self.boton = tk.Button(
             self.Pycua,
@@ -1640,11 +1667,29 @@ class modicrea:
             width=10,
         )
 
-        textopy = self.py_entry.get("1.0",END)
-        usupy = self.usuario.get()
-        print (usupy)
-        c.execute("select cedula from usuarios where username = %s", (usupy,))
-        cepy = c.fetchone()
+        self.dele = tk.Button(
+            self.Pycua,
+            text="Eliminar Proyecto",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" PROYECTOS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
 
         self.Pycua.pack()
         self.framepy.pack()
@@ -1654,18 +1699,68 @@ class modicrea:
         self.lbusu.pack()
         self.usuario.pack()
         self.boton.pack()
+        self.dele.pack()
+        self.pyidlista.pack()
         self.Pycua.place(rely=0.5, relx=0.5, anchor=CENTER)
         self.framepy.place(rely=0.2, relx=0.1, anchor=CENTER)
         self.py_entry.place(rely=0.3, relx=0.5, anchor=CENTER, width=600, height=200)
         self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
         self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
-        self.boton.place(rely=0.7, relx=0.5, anchor=CENTER)
+        self.usuario.set(usuarios[0])
+        self.pyidlista.place(rely=0.5, relx=0.6, anchor=CENTER)
+        self.boton.place(rely=0.7, relx=0.3, anchor=CENTER)
+        self.dele.place(rely=0.7, relx=0.7, anchor=CENTER)
 
         def guardar():
-            c.execute("insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)", (cepy,textopy,1))
+            textopy = self.py_entry.get("1.0", "end-1c")
+            usupy = self.usuario.get()
+            pyidnm = int(self.pyidlista.get())
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
+            print(pyid)
+            if pyidnm not in pyid:
+                c.execute(
+                    "insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)",
+                    (cepy, textopy, pyidnm),
+                )
+                connection.commit()
+                messagebox.showinfo("CONFIRMACION", "Proyecto Guardado")
+            else:
+                c.execute(
+                    "update proyectos set proyect = %s where pyid = %s and cedula = %s",
+                    (textopy, pyidnm, cepy),
+                )
+                connection.commit()
+                messagebox.showinfo("CONFIRMACION", "Proyecto Actualizado")
 
         self.boton["command"] = guardar
 
+        def eliminar():
+            pyidgb = self.pyidlista.get()
+            usugb = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usugb,))
+            cepy = c.fetchone()
+            print(pyidgb, usugb)
+            c.execute(
+                "delete from proyectos where pyid = %s and cedula = %s",
+                (
+                    pyidgb,
+                    cepy,
+                ),
+            )
+            connection.commit()
+            messagebox.showinfo("CONFIRMACION", "Proyecto Eliminado")
+
+        self.dele["command"] = eliminar
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = proyectos(scrumwindow)
+
+        self.Vl["command"] = volver
 
 
 root.mainloop()
