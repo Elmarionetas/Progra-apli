@@ -424,8 +424,26 @@ class proyectos:
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
         globals()["cedula"] = ce
+
+        c.execute(
+            "select proyect from proyectos where cedula = %s and pyid = %s", (ce, 1)
+        )
+        s1 = c.fetchall()
+        c.execute(
+            "select proyect from proyectos where cedula = %s and pyid = %s", (ce, 2)
+        )
+        s2 = c.fetchall()
+        c.execute(
+            "select proyect from proyectos where cedula = %s and pyid = %s", (ce, 3)
+        )
+        s3 = c.fetchall()
+
         c.execute("select proyect from proyectos where cedula = %s", (ce,))
-        s = c.fetchall()
+
+        s = "PARA PONER EL NOMBRE DEL PROYECTO"
+        suno = "PARA PONER EL NOMBRE DEL PROYECTO CUANDO HAY +"
+        pyids = "PARA ID DEL PROYECTO "
+        pyidsuno = "PARA ID DEL PROYECTO CUANDO HAY +"
 
         if c.rowcount == 0:
 
@@ -458,6 +476,16 @@ class proyectos:
 
         elif c.rowcount == 1:
 
+            if s1:
+                s = s1
+                pyids = 1
+            elif s2:
+                s = s2
+                pyids = 2
+            elif s3:
+                s = s3
+                pyids = 3
+
             # ------- PROYECTO 1 --------- #
 
             self.PY1Cua = tk.Frame(
@@ -472,7 +500,7 @@ class proyectos:
             self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY1 = tk.Button(
                 self.PY1frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[0]),
+                text="\n".join("".join(map(str, tup)) for tup in s),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -482,7 +510,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce, 1),
+                (1, ce, pyids),
             )
             todo = c.fetchall()
             self.todo = tk.Label(
@@ -497,7 +525,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (2, ce, 1),
+                (2, ce, pyids),
             )
             inpro = c.fetchall()
             self.inpro = tk.Label(
@@ -512,7 +540,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (3, ce, 1),
+                (3, ce, pyids),
             )
             done = c.fetchall()
             self.done = tk.Label(
@@ -540,6 +568,13 @@ class proyectos:
 
         elif c.rowcount == 2:
 
+            if s1:
+                suno = s1
+                pyidsuno = 1
+            elif s2:
+                suno = s2
+                pyidsuno = 2
+
             # ------- PROYECTO 1 --------- #
 
             self.PY1Cua = tk.Frame(
@@ -554,7 +589,7 @@ class proyectos:
             self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY1 = tk.Button(
                 self.PY1frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[0]),
+                text="\n".join("".join(map(str, tup)) for tup in suno),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -564,7 +599,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce, 1),
+                (1, ce, pyidsuno),
             )
             todo = c.fetchall()
             self.todo = tk.Label(
@@ -579,7 +614,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (2, ce, 1),
+                (2, ce, pyidsuno),
             )
             inpro = c.fetchall()
             self.inpro = tk.Label(
@@ -594,7 +629,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (3, ce, 1),
+                (3, ce, pyidsuno),
             )
             done = c.fetchall()
             self.done = tk.Label(
@@ -619,6 +654,13 @@ class proyectos:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
+            if s3:
+                s = s3
+                pyids = 3
+            elif s2:
+                s = s2
+                pyids = 3
+
             # ------- PROYECTO 2 --------- #
 
             self.PY2Cua = tk.Frame(
@@ -633,7 +675,7 @@ class proyectos:
             self.PY2frame = tk.Frame(self.PY2Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY2 = tk.Button(
                 self.PY2frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[1]),
+                text="\n".join("".join(map(str, tup)) for tup in s),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -643,7 +685,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce, 2),
+                (1, ce, pyids),
             )
             todo = c.fetchall()
             self.todo = tk.Label(
@@ -658,7 +700,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (2, ce, 2),
+                (2, ce, pyids),
             )
             inpro = c.fetchall()
             self.inpro = tk.Label(
@@ -673,7 +715,7 @@ class proyectos:
 
             c.execute(
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (3, ce, 2),
+                (3, ce, pyids),
             )
             done = c.fetchall()
             self.done = tk.Label(
@@ -716,7 +758,7 @@ class proyectos:
             self.PY1frame = tk.Frame(self.PY1Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY1 = tk.Button(
                 self.PY1frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[0]),
+                text="\n".join("".join(map(str, tup)) for tup in s1),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -795,7 +837,7 @@ class proyectos:
             self.PY2frame = tk.Frame(self.PY2Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY2 = tk.Button(
                 self.PY2frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[1]),
+                text="\n".join("".join(map(str, tup)) for tup in s2),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -874,7 +916,7 @@ class proyectos:
             self.PY3frame = tk.Frame(self.PY3Cua, bg="#9E91E9", padx=1, pady=1)
             self.PY3 = tk.Button(
                 self.PY3frame,
-                text="\n".join("".join(map(str, tup)) for tup in s[2]),
+                text="\n".join("".join(map(str, tup)) for tup in s3),
                 padx=50,
                 pady=5,
                 fg="black",
@@ -941,7 +983,6 @@ class proyectos:
             self.PY1["command"] = scrumsalto
             self.PY2["command"] = scrumsalto
             self.PY3["command"] = scrumsalto
-        print(s)
 
         self.sec = tk.Button(
             self.master,
@@ -1719,7 +1760,6 @@ class modicrea:
             cepy = c.fetchone()
             c.execute("select pyid from proyectos where cedula = %s", (cepy,))
             pyid = np.array(c.fetchall())
-            print(pyid)
             if pyidnm not in pyid:
                 c.execute(
                     "insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)",
@@ -1742,7 +1782,6 @@ class modicrea:
             usugb = self.usuario.get()
             c.execute("select cedula from usuarios where username = %s", (usugb,))
             cepy = c.fetchone()
-            print(pyidgb, usugb)
             c.execute(
                 "delete from proyectos where pyid = %s and cedula = %s",
                 (
