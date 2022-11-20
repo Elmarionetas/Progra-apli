@@ -6,6 +6,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.font import Font
 import numpy as np
+from pynput import keyboard as kb
 
 # import mysql.connector
 import psycopg2
@@ -153,7 +154,7 @@ def login():
     if user is not None:
         # messagebox.showinfo('Test','Test')
         proyectoswindow = tk.Toplevel()
-        app = proyectos(proyectoswindow)
+        app = py(proyectoswindow)
         root.withdraw()  # hide the root
         proyectoswindow.protocol("WM_DELETE_WINDOW", close_win)  # close the app
 
@@ -372,7 +373,7 @@ register_button["command"] = register
 # ------------------------------------------------------------------------ #
 
 
-class proyectos:
+class py:
     def __init__(self, master):
 
         self.master = master
@@ -778,7 +779,7 @@ class proyectos:
             self.PY1 = tk.Button(
                 self.PY1frame,
                 text="\n".join("".join(map(str, tup)) for tup in s1),
-                padx=120,
+                padx=100,
                 pady=5,
                 fg="black",
                 font=("Orbitron", 20),
@@ -861,7 +862,7 @@ class proyectos:
             self.PY2 = tk.Button(
                 self.PY2frame,
                 text="\n".join("".join(map(str, tup)) for tup in s2),
-                padx=120,
+                padx=100,
                 pady=5,
                 fg="black",
                 font=("Orbitron", 20),
@@ -944,7 +945,7 @@ class proyectos:
             self.PY3 = tk.Button(
                 self.PY3frame,
                 text="\n".join("".join(map(str, tup)) for tup in s3),
-                padx=120,
+                padx=100,
                 pady=5,
                 fg="black",
                 font=("Orbitron", 20),
@@ -1015,6 +1016,8 @@ class proyectos:
             self.PY2["command"] = scrumsalto
             self.PY3["command"] = scrumsalto
 
+        # ------- CERRAR SESIÓN -------- #
+
         self.sec = tk.Button(
             self.master,
             text=" CERRAR SESIÓN ",
@@ -1026,6 +1029,13 @@ class proyectos:
         )
         self.sec.pack()
         self.sec.place(rely=0.045, relx=0.915, anchor=CENTER)
+
+        def cerrar():
+            self.master.destroy()
+
+        self.sec["command"] = cerrar
+
+        # ------- ADMINISTRAR PROYECTOS -------- #
 
         self.proy = tk.Button(
             self.master,
@@ -1039,15 +1049,11 @@ class proyectos:
         self.proy.pack()
         self.proy.place(rely=0.045, relx=0.13, anchor=CENTER)
 
-        def cerrar():
-            self.master.destroy()
-
         def proyectos():
             scrumwindow = tk.Toplevel()
             self.master.withdraw()
             app = modicrea(scrumwindow)
 
-        self.sec["command"] = cerrar
         self.proy["command"] = proyectos
 
 
@@ -1070,6 +1076,9 @@ class sb:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+
+        c.execute("select cedula from usuarios where username = %s", (user,))
+        ce = c.fetchone()
 
         # -------- TITULO -------------- #
 
@@ -1122,11 +1131,30 @@ class sb:
             width=10,
         )
 
+        
+        c.execute(
+              "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (1, ce,1),
+        )
+    
+        todotx = c.fetchall()
+        self.todolb = tk.Label(
+            self.ToDoCua,
+            text="\n".join("".join(map(str, tup)) for tup in todotx),
+            padx=100,
+            pady=10,
+            fg="black",
+            font=("Orbitron", 15),
+            width=10,
+        )
+
         self.ToDoCua.pack()
         self.ToDoframe.pack()
         self.toDo.pack()
+        self.todolb.pack()
         self.ToDoCua.place(rely=0.52, relx=0.2, anchor=CENTER)
         self.ToDoframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.todolb.place(rely=0.3, relx=0.5, anchor=CENTER)
 
         # ----- IN PROGRESS ------ #
 
@@ -1186,6 +1214,27 @@ class sb:
         self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
 
+        # ------- ADMINISTRAR TAREAS -------- #
+
+        self.proy = tk.Button(
+            self.master,
+            text=" ADMINISTRAR TAREAS ",
+            padx=135,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=8,
+        )
+        self.proy.pack()
+        self.proy.place(rely=0.045, relx=0.13, anchor=CENTER)
+
+        def proyectos():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = modicreatk(scrumwindow)
+
+        self.proy["command"] = proyectos
+
         # ------- VOLVER -------- #
 
         self.Vl = tk.Button(
@@ -1225,7 +1274,7 @@ class sb:
         def volver():
             scrumwindow = tk.Toplevel()
             self.master.withdraw()
-            app = proyectos(scrumwindow)
+            app = py(scrumwindow)
 
         self.Vl["command"] = volver
 
@@ -1731,7 +1780,6 @@ class modicrea:
         self.py_entry.place(rely=0.26, relx=0.36, anchor=CENTER, width=600, height=150)
         self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
         self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
-        self.usuario.set(usuarios[0])
         self.pyidlista.place(rely=0.5, relx=0.6, anchor=CENTER)
         self.boton.place(rely=0.7, relx=0.3, anchor=CENTER)
         self.dele.place(rely=0.7, relx=0.7, anchor=CENTER)
@@ -1754,17 +1802,17 @@ class modicrea:
         def volver():
             scrumwindow = tk.Toplevel()
             self.master.withdraw()
-            app = proyectos(scrumwindow)
+            app = py(scrumwindow)
 
         self.Vl["command"] = volver
 
-        usupy = self.usuario.get()
-        c.execute("select cedula from usuarios where username = %s", (usupy,))
-        cepy = c.fetchone()
-        c.execute("select pyid from proyectos where cedula = %s", (cepy,))
-        pyid = np.array(c.fetchall())
 
         def guardar():
+            usupy = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
             pyidnm = int(self.pyidlista.get())
             textopy = self.py_entry.get("1.0", "end-1c")
             if pyidnm not in pyid:
@@ -1781,10 +1829,16 @@ class modicrea:
                 )
                 connection.commit()
                 messagebox.showinfo("CONFIRMACION", "Proyecto Actualizado")
+            self.py_entry.delete(0.0, END)
 
         self.boton["command"] = guardar
 
         def rellenarcuadro(event):
+            usupy = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
             pyidnm = int(self.pyidlista.get())
             c.execute("select proyect from proyectos where pyid  = %s", (pyidnm,))
             text = c.fetchall()
@@ -1799,6 +1853,11 @@ class modicrea:
         self.pyidlista.bind("<<ComboboxSelected>>", rellenarcuadro)
 
         def eliminar():
+            usupy = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
             pyidnm = int(self.pyidlista.get())
             if pyidnm in pyid:
                 c.execute(
@@ -1808,10 +1867,241 @@ class modicrea:
                         cepy,
                     ),
                 )
+                c.execute(
+                    "delete from tareas where pyid = %s and cedula = %s",
+                    (
+                        pyidnm,
+                        cepy,
+                    ),
+                )
                 connection.commit()
                 messagebox.showinfo("CONFIRMACION", "Proyecto Eliminado")
             else:
                 messagebox.showinfo("CONFIRMACION", "Proyecto No Existe")
+            self.py_entry.delete(0.0, END)
+
+        self.dele["command"] = eliminar
+
+
+# ------------------------------------------------------------------------ #
+
+
+class modicreatk:
+    def __init__(self, master):
+
+        # ----------- Register Page ------------- #
+        self.master = master
+        w = self.master.winfo_screenwidth() - 150
+        h = self.master.winfo_screenheight() - 170
+        # ----------- CENTER FORM ------------- #
+        ws = self.master.winfo_screenwidth()
+        hs = self.master.winfo_screenheight()
+        x = (ws - w) / 2
+        y = (hs - h) / 2
+        self.master.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        # ------------------------------ #
+
+        self.master.config(bg="#9E91E9")
+
+        # -------- TITULO -------------- #
+
+        self.Pycua = tk.Frame(
+            self.master,
+            highlightbackground="#ECDAFB",
+            highlightcolor="#ECDAFB",
+            highlightthickness=2,
+            bg="#ECDAFB",
+            width=ws - 200,
+            height=700,
+        )
+
+        self.titleframe = tk.Frame(self.master, bg="#9E91E9", padx=1, pady=1)
+        self.lbl = tk.Label(
+            self.titleframe,
+            text="ADMINISTRAR TAREAS",
+            padx=150,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        self.framepy = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbpy = tk.Label(
+            self.framepy,
+            text="Tarea: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        self.py_entry = tk.Text(self.Pycua, font=("Orbitron", 14))
+
+        self.frameusu = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbusu = tk.Label(
+            self.frameusu,
+            text="Estado: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        c.execute("select username from usuarios")
+        usuarios = c.fetchall()
+        for n in range(0, c.rowcount):
+            self.usuario = ttk.Combobox(
+                self.Pycua,
+                values=usuarios[0] + usuarios[n],
+                font=Font(size=15),
+                state="readonly",
+            )
+
+        self.pyidlista = ttk.Combobox(
+            self.Pycua, values=["1", "2", "3"], font=Font(size=15), state="readonly"
+        )
+
+        self.boton = tk.Button(
+            self.Pycua,
+            text="Guardar",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        self.dele = tk.Button(
+            self.Pycua,
+            text="Eliminar Proyecto",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
+        self.titleframe.pack()
+        self.lbl.pack()
+        self.Pycua.pack()
+        self.framepy.pack()
+        self.lbpy.pack()
+        self.py_entry.pack()
+        self.frameusu.pack()
+        self.lbusu.pack()
+        self.usuario.pack()
+        self.boton.pack()
+        self.dele.pack()
+        self.pyidlista.pack()
+        self.titleframe.place(rely=0.05, relx=0.5, anchor=CENTER)
+        self.Pycua.place(rely=0.5, relx=0.5, anchor=CENTER)
+        self.framepy.place(rely=0.2, relx=0.1, anchor=CENTER)
+        self.py_entry.place(rely=0.26, relx=0.36, anchor=CENTER, width=600, height=150)
+        self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
+        self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
+        self.pyidlista.place(rely=0.5, relx=0.6, anchor=CENTER)
+        self.boton.place(rely=0.7, relx=0.3, anchor=CENTER)
+        self.dele.place(rely=0.7, relx=0.7, anchor=CENTER)
+
+        # ------- VOLVER -------- #
+
+        self.Vl = tk.Button(
+            self.master,
+            text=" PROYECTOS ",
+            padx=50,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 18),
+            width=7,
+        )
+
+        self.Vl.pack()
+        self.Vl.place(rely=0.04, relx=0.92, anchor=CENTER)
+
+        def volver():
+            scrumwindow = tk.Toplevel()
+            self.master.withdraw()
+            app = py(scrumwindow)
+
+        self.Vl["command"] = volver
+
+
+        def guardar():
+            usupy = self.usuario.get()
+            print (usupy)
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
+            pyidnm = int(self.pyidlista.get())
+            textopy = self.py_entry.get("1.0", "end-1c")
+            if pyidnm not in pyid:
+                c.execute(
+                    "insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)",
+                    (cepy, textopy, pyidnm),
+                )
+                connection.commit()
+                messagebox.showinfo("CONFIRMACION", "Proyecto Guardado")
+            else:
+                c.execute(
+                    "update proyectos set proyect = %s where pyid = %s and cedula = %s",
+                    (textopy, pyidnm, cepy),
+                )
+                connection.commit()
+                messagebox.showinfo("CONFIRMACION", "Proyecto Actualizado")
+            self.py_entry.delete(0.0, END)
+
+        self.boton["command"] = guardar
+
+        def rellenarcuadro(event):
+            usupy = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
+            pyidnm = int(self.pyidlista.get())
+            c.execute("select proyect from proyectos where pyid  = %s and cedula = %s", (pyidnm,cepy,))
+            text = c.fetchall()
+            if pyidnm in pyid:
+                self.py_entry.insert(
+                    tk.END, "\n".join("".join(map(str, tup)) for tup in text)
+                )
+            else:
+                self.py_entry.delete(0.0, END)
+
+        self.pyidlista.bind("<<ComboboxSelected>>", rellenarcuadro)
+
+        def eliminar():
+            usupy = self.usuario.get()
+            c.execute("select cedula from usuarios where username = %s", (usupy,))
+            cepy = c.fetchone()
+            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
+            pyid = np.array(c.fetchall())
+            pyidnm = int(self.pyidlista.get())
+            if pyidnm in pyid:
+                c.execute(
+                    "delete from proyectos where pyid = %s and cedula = %s",
+                    (
+                        pyidnm,
+                        cepy,
+                    ),
+                )
+                c.execute(
+                    "delete from tareas where pyid = %s and cedula = %s",
+                    (
+                        pyidnm,
+                        cepy,
+                    ),
+                )
+                connection.commit()
+                messagebox.showinfo("CONFIRMACION", "Proyecto Eliminado")
+            else:
+                messagebox.showinfo("CONFIRMACION", "Proyecto No Existe")
+            self.py_entry.delete(0.0, END)
 
         self.dele["command"] = eliminar
 
