@@ -1,17 +1,16 @@
 import tkinter as tk
-from tkinter import *
+from tkinter import * # type: ignore
 from tkinter import ttk
-from tkinter.ttk import *
+from tkinter.ttk import * # type: ignore
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.font import Font
 import numpy as np
-from pynput import keyboard as kb
 
-# import mysql.connector
 import psycopg2
 
 user = "fofia"
+tppy = "NUMERO DE PROYECTO"
 root = Tk()
 connection = psycopg2.connect(
     host="localhost", user="postgres", password="1962", database="SCRUMBASE"
@@ -421,6 +420,10 @@ class py:
             self.master.withdraw()
             app = sb(scrumwindow)
 
+        def pyidget():
+            globals()["tppy"] = pyids
+            print(tppy)
+
         # -------- PROYECTOS ----------- #
 
         c.execute("select cedula from usuarios where username = %s", (user,))
@@ -571,7 +574,9 @@ class py:
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
+
             self.PY1["command"] = scrumsalto
+            self.PY1["command"] = pyidget()
 
         # ------- DOS PROYECTOS --------- #
 
@@ -756,6 +761,7 @@ class py:
             self.todo.place(rely=0.3, relx=0.5, anchor=CENTER)
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
+
             self.PY1["command"] = scrumsalto
             self.PY2["command"] = scrumsalto
 
@@ -1131,18 +1137,17 @@ class sb:
             width=10,
         )
 
-        
         c.execute(
-              "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce,1),
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (1, ce, tppy),
         )
-    
+
         todotx = c.fetchall()
         self.todolb = tk.Label(
             self.ToDoCua,
             text="\n".join("".join(map(str, tup)) for tup in todotx),
             padx=100,
-            pady=10,
+            pady=300,
             fg="black",
             font=("Orbitron", 15),
             width=10,
@@ -1154,7 +1159,7 @@ class sb:
         self.todolb.pack()
         self.ToDoCua.place(rely=0.52, relx=0.2, anchor=CENTER)
         self.ToDoframe.place(rely=0.06, relx=0.5, anchor=CENTER)
-        self.todolb.place(rely=0.3, relx=0.5, anchor=CENTER)
+        self.todolb.place(rely=0.55, relx=0.5, anchor=CENTER)
 
         # ----- IN PROGRESS ------ #
 
@@ -1179,11 +1184,29 @@ class sb:
             width=10,
         )
 
+        c.execute(
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (2, ce, tppy),
+        )
+
+        inprotx = c.fetchall()
+        self.inprolb = tk.Label(
+            self.InProCua,
+            text="\n".join("".join(map(str, tup)) for tup in inprotx),
+            padx=100,
+            pady=300,
+            fg="black",
+            font=("Orbitron", 15),
+            width=10,
+        )
+
         self.InProCua.pack()
         self.InProframe.pack()
         self.InPro.pack()
+        self.inprolb.pack()
         self.InProCua.place(rely=0.52, relx=0.5, anchor=CENTER)
         self.InProframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.inprolb.place(rely=0.55, relx=0.5, anchor=CENTER)
 
         # ------- DONE -------- #
 
@@ -1208,11 +1231,29 @@ class sb:
             width=10,
         )
 
+        c.execute(
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (3, ce, tppy),
+        )
+
+        donetx = c.fetchall()
+        self.donelb = tk.Label(
+            self.DoneCua,
+            text="\n".join("".join(map(str, tup)) for tup in donetx),
+            padx=100,
+            pady=300,
+            fg="black",
+            font=("Orbitron", 15),
+            width=10,
+        )
+
         self.DoneCua.pack()
         self.Doneframe.pack()
         self.Done.pack()
+        self.donelb.pack()
         self.DoneCua.place(rely=0.52, relx=0.8, anchor=CENTER)
         self.Doneframe.place(rely=0.06, relx=0.5, anchor=CENTER)
+        self.donelb.place(rely=0.55, relx=0.5, anchor=CENTER)
 
         # ------- ADMINISTRAR TAREAS -------- #
 
@@ -1663,6 +1704,9 @@ class done:
         self.Vl["command"] = volver
 
 
+# ------------------------------------------------------------------------ #
+
+
 class modicrea:
     def __init__(self, master):
 
@@ -1805,7 +1849,6 @@ class modicrea:
             app = py(scrumwindow)
 
         self.Vl["command"] = volver
-
 
         def guardar():
             usupy = self.usuario.get()
@@ -1951,7 +1994,10 @@ class modicreatk:
             width=10,
         )
 
-        c.execute("select username from usuarios")
+        c.execute("select cedula from proyectos where pyid = %s", (tppy,))
+        cepygb = c.fetchall()
+        print (cepygb)
+        c.executemany("select username from usuarios where pyid = %s", (tppy,))
         usuarios = c.fetchall()
         for n in range(0, c.rowcount):
             self.usuario = ttk.Combobox(
@@ -1977,7 +2023,7 @@ class modicreatk:
 
         self.dele = tk.Button(
             self.Pycua,
-            text="Eliminar Proyecto",
+            text="Eliminar Tarea",
             padx=50,
             pady=5,
             fg="black",
@@ -2011,7 +2057,7 @@ class modicreatk:
 
         self.Vl = tk.Button(
             self.master,
-            text=" PROYECTOS ",
+            text=" VOLVER ",
             padx=50,
             pady=5,
             fg="black",
@@ -2025,31 +2071,29 @@ class modicreatk:
         def volver():
             scrumwindow = tk.Toplevel()
             self.master.withdraw()
-            app = py(scrumwindow)
+            app = sb(scrumwindow)
 
         self.Vl["command"] = volver
 
-
         def guardar():
             usupy = self.usuario.get()
-            print (usupy)
             c.execute("select cedula from usuarios where username = %s", (usupy,))
             cepy = c.fetchone()
-            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
-            pyid = np.array(c.fetchall())
-            pyidnm = int(self.pyidlista.get())
+            c.execute("select tarea from tareas where cedula = %s", (cepy,))
+            tareatx = np.array(c.fetchall())
+            estadotr = int(self.pyidlista.get())
             textopy = self.py_entry.get("1.0", "end-1c")
-            if pyidnm not in pyid:
+            if textopy not in tareatx:
                 c.execute(
-                    "insert into proyectos(cedula,proyect,pyid) values (%s,%s,%s)",
-                    (cepy, textopy, pyidnm),
+                    "insert into tareas(cedula,tarea,pyid,estado) values (%s,%s,%s,%s)",
+                    (cepy, textopy, tppy, estadotr),
                 )
                 connection.commit()
                 messagebox.showinfo("CONFIRMACION", "Proyecto Guardado")
             else:
                 c.execute(
-                    "update proyectos set proyect = %s where pyid = %s and cedula = %s",
-                    (textopy, pyidnm, cepy),
+                    "update tareas set tarea = %s where estado = %s and cedula = %s and pyid = %s",
+                    (textopy, estadotr, cepy, tppy),
                 )
                 connection.commit()
                 messagebox.showinfo("CONFIRMACION", "Proyecto Actualizado")
@@ -2061,12 +2105,15 @@ class modicreatk:
             usupy = self.usuario.get()
             c.execute("select cedula from usuarios where username = %s", (usupy,))
             cepy = c.fetchone()
-            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
-            pyid = np.array(c.fetchall())
-            pyidnm = int(self.pyidlista.get())
-            c.execute("select proyect from proyectos where pyid  = %s and cedula = %s", (pyidnm,cepy,))
+            c.execute("select tarea from tareas where cedula = %s", (cepy,))
+            tareatx = np.array(c.fetchall())
+            estadotr = int(self.pyidlista.get())
+            c.execute(
+                "select tarea from tareas where pyid  = %s and cedula = %s and estado = %s",
+                (tppy, cepy, estadotr),
+            )
             text = c.fetchall()
-            if pyidnm in pyid:
+            if text in tareatx:
                 self.py_entry.insert(
                     tk.END, "\n".join("".join(map(str, tup)) for tup in text)
                 )
