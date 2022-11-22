@@ -1,7 +1,7 @@
 import tkinter as tk
-from tkinter import * # type: ignore
+from tkinter import *  # type: ignore
 from tkinter import ttk
-from tkinter.ttk import * # type: ignore
+from tkinter.ttk import *  # type: ignore
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.font import Font
@@ -420,9 +420,8 @@ class py:
             self.master.withdraw()
             app = sb(scrumwindow)
 
-        def pyidget():
-            globals()["tppy"] = pyids
-            print(tppy)
+        def pyidget(f):
+            globals()["tppy"] = f
 
         # -------- PROYECTOS ----------- #
 
@@ -575,8 +574,7 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
-            self.PY1["command"] = scrumsalto
-            self.PY1["command"] = pyidget()
+            self.PY1["command"] = lambda: [pyidget(pyids), scrumsalto()]
 
         # ------- DOS PROYECTOS --------- #
 
@@ -672,6 +670,8 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
+            self.PY1["command"] = lambda: [pyidget(pyidsuno), scrumsalto()]
+
             # ------- PROYECTO 2 --------- #
 
             if s3:
@@ -762,8 +762,7 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
-            self.PY1["command"] = scrumsalto
-            self.PY2["command"] = scrumsalto
+            self.PY2["command"] = lambda: [pyidget(pyids), scrumsalto()]
 
         # ------- TRES PROYECTOS --------- #
 
@@ -852,6 +851,8 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
+            self.PY1["command"] = lambda: [pyidget(1), scrumsalto()]
+
             # ------- PROYECTO 2 --------- #
 
             self.PY2Cua = tk.Frame(
@@ -935,6 +936,8 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
+            self.PY2["command"] = lambda: [pyidget(2), scrumsalto()]
+
             # ------- PROYECTO 3 -------- #
 
             self.PY3Cua = tk.Frame(
@@ -962,8 +965,8 @@ class py:
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (1, ce, 3),
             )
-
             todo = c.fetchall()
+
             self.todo = tk.Label(
                 self.PY3Cua,
                 text="\n".join("".join(map(str, tup)) for tup in todo),
@@ -978,8 +981,8 @@ class py:
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (2, ce, 3),
             )
-
             inpro = c.fetchall()
+
             self.inpro = tk.Label(
                 self.PY3Cua,
                 text="\n".join("".join(map(str, tup)) for tup in inpro),
@@ -994,8 +997,8 @@ class py:
                 "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
                 (3, ce, 3),
             )
-
             done = c.fetchall()
+
             self.done = tk.Label(
                 self.PY3Cua,
                 text="\n".join("".join(map(str, tup)) for tup in done),
@@ -1018,9 +1021,7 @@ class py:
             self.inpro.place(rely=0.5, relx=0.5, anchor=CENTER)
             self.done.place(rely=0.7, relx=0.5, anchor=CENTER)
 
-            self.PY1["command"] = scrumsalto
-            self.PY2["command"] = scrumsalto
-            self.PY3["command"] = scrumsalto
+            self.PY3["command"] = lambda: [pyidget(3), scrumsalto()]
 
         # ------- CERRAR SESIÓN -------- #
 
@@ -1340,6 +1341,9 @@ class todo:
 
         self.master.config(bg="#9E91E9")
 
+        c.execute("select cedula from usuarios where username = %s", (user,))
+        ce = c.fetchone()
+
         # -------- TITULO -------------- #
 
         self.header = tk.Frame(
@@ -1391,10 +1395,27 @@ class todo:
             width=10,
         )
 
+        c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (1, ce, tppy),
+            )
+        todo = c.fetchall()
+
+        
+        if c.rowcount == 1:
+            s = todo[0]
+            s1 = "NO"
+        elif c.rowcount == 2:
+            s = todo[0]
+            s1 = todo[1]
+        else:
+            s = "NO"
+            s1 = "NO"
+
         self.ToDoEspa = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
         self.ToDoEspa1 = tk.Label(
             self.ToDoEspa,
-            text="TO DO 1",
+            text="\n".join("".join(map(str, tup)) for tup in s),
             padx=150,
             pady=150,
             fg="black",
@@ -1405,7 +1426,7 @@ class todo:
         self.ToDoEspa2 = tk.Frame(self.ToDoCua, bg="#9E91E9", padx=1, pady=1)
         self.ToDoEspa3 = tk.Label(
             self.ToDoEspa2,
-            text="TO DO 2",
+            text="\n".join("".join(map(str, tup)) for tup in s1),
             padx=150,
             pady=150,
             fg="black",
@@ -1468,6 +1489,9 @@ class progress:
 
         self.master.config(bg="#9E91E9")
 
+        c.execute("select cedula from usuarios where username = %s", (user,))
+        ce = c.fetchone()
+
         # -------- TITULO -------------- #
 
         self.header = tk.Frame(
@@ -1519,10 +1543,26 @@ class progress:
             width=10,
         )
 
+        c.execute(
+                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+                (2, ce, tppy),
+            )
+        inpro = c.fetchall()
+
+        if c.rowcount == 1:
+            s = inpro[0]
+            s1  = "NO"
+        elif c.rowcount == 2:
+            s = inpro[0]
+            s1 = inpro[1]
+        else:
+            s = "NO"
+            s1 = "NO"
+
         self.InProEspa = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
         self.InProEspa1 = tk.Label(
             self.InProEspa,
-            text=" EN PROGRESO 1 ",
+            text="\n".join("".join(map(str, tup)) for tup in s),
             padx=150,
             pady=150,
             fg="black",
@@ -1533,7 +1573,7 @@ class progress:
         self.InProEspa2 = tk.Frame(self.InProCua, bg="#9E91E9", padx=1, pady=1)
         self.InProEspa3 = tk.Label(
             self.InProEspa2,
-            text=" EN PROGRESO 2 ",
+            text="\n".join("".join(map(str, tup)) for tup in s1),
             padx=150,
             pady=150,
             fg="black",
@@ -1596,6 +1636,9 @@ class done:
 
         self.master.config(bg="#9E91E9")
 
+        c.execute("select cedula from usuarios where username = %s", (user,))
+        ce = c.fetchone()
+
         # ---------- TITULO ------------ #
 
         self.header = tk.Frame(
@@ -1647,10 +1690,26 @@ class done:
             width=10,
         )
 
+        c.execute(
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (3, ce, tppy),
+            )
+        done = c.fetchall()
+
+        if c.rowcount == 1:
+            s = done[0]
+            s1  = "NO"
+        elif c.rowcount == 2:
+            s = done[0]
+            s1 = done[1]
+        else:
+            s = "NO"
+            s1 = "NO"
+
         self.DoneEspa = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
         self.DoneEspa1 = tk.Label(
             self.DoneEspa,
-            text=" TERMINADO 1 ",
+            text="\n".join("".join(map(str, tup)) for tup in s),
             padx=150,
             pady=150,
             fg="black",
@@ -1661,7 +1720,7 @@ class done:
         self.DoneEspa2 = tk.Frame(self.DoneCua, bg="#9E91E9", padx=1, pady=1)
         self.DoneEspa3 = tk.Label(
             self.DoneEspa2,
-            text=" TERMINADO 2 ",
+            text="\n".join("".join(map(str, tup)) for tup in s1),
             padx=150,
             pady=150,
             fg="black",
@@ -1888,7 +1947,7 @@ class modicrea:
             if pyidnm in pyid:
                 self.py_entry.delete(0.0, END)
                 self.py_entry.insert(
-                    tk.END, "\n".join("".join(map(str, tup)) for tup in text)
+                    tk.END, "\n".join("".join(map(str, tup)) for tup in text[0])
                 )
             else:
                 self.py_entry.delete(0.0, END)
@@ -1994,18 +2053,17 @@ class modicreatk:
             width=10,
         )
 
-        c.execute("select cedula from proyectos where pyid = %s", (tppy,))
-        cepygb = c.fetchall()
-        print (cepygb)
-        c.executemany("select username from usuarios where pyid = %s", (tppy,))
+
+        c.execute("select username from usuarios where username = %s", (user,))
         usuarios = c.fetchall()
-        for n in range(0, c.rowcount):
-            self.usuario = ttk.Combobox(
-                self.Pycua,
-                values=usuarios[0] + usuarios[n],
-                font=Font(size=15),
-                state="readonly",
-            )
+        print(usuarios)
+
+        self.usuario = ttk.Combobox(
+            self.Pycua,
+            values=usuarios[0],
+            font=Font(size=15),
+            state="readonly",
+        )
 
         self.pyidlista = ttk.Combobox(
             self.Pycua, values=["1", "2", "3"], font=Font(size=15), state="readonly"
@@ -2080,7 +2138,7 @@ class modicreatk:
             c.execute("select cedula from usuarios where username = %s", (usupy,))
             cepy = c.fetchone()
             c.execute("select tarea from tareas where cedula = %s", (cepy,))
-            tareatx = np.array(c.fetchall())
+            tareatx = c.fetchall()
             estadotr = int(self.pyidlista.get())
             textopy = self.py_entry.get("1.0", "end-1c")
             if textopy not in tareatx:
@@ -2089,14 +2147,14 @@ class modicreatk:
                     (cepy, textopy, tppy, estadotr),
                 )
                 connection.commit()
-                messagebox.showinfo("CONFIRMACION", "Proyecto Guardado")
+                messagebox.showinfo("CONFIRMACION", "Tarea Guardado")
             else:
                 c.execute(
                     "update tareas set tarea = %s where estado = %s and cedula = %s and pyid = %s",
                     (textopy, estadotr, cepy, tppy),
                 )
                 connection.commit()
-                messagebox.showinfo("CONFIRMACION", "Proyecto Actualizado")
+                messagebox.showinfo("CONFIRMACION", "Tarea Actualizado")
             self.py_entry.delete(0.0, END)
 
         self.boton["command"] = guardar
@@ -2126,28 +2184,21 @@ class modicreatk:
             usupy = self.usuario.get()
             c.execute("select cedula from usuarios where username = %s", (usupy,))
             cepy = c.fetchone()
-            c.execute("select pyid from proyectos where cedula = %s", (cepy,))
-            pyid = np.array(c.fetchall())
-            pyidnm = int(self.pyidlista.get())
-            if pyidnm in pyid:
+            c.execute("select tarea from tareas where cedula = %s", (cepy,))
+            tareatx = np.array(c.fetchall())
+            textopy = self.py_entry.get("1.0", "end-1c")
+            if textopy in tareatx:
                 c.execute(
-                    "delete from proyectos where pyid = %s and cedula = %s",
+                    "delete from tareas where tarea = %s and cedula = %s",
                     (
-                        pyidnm,
-                        cepy,
-                    ),
-                )
-                c.execute(
-                    "delete from tareas where pyid = %s and cedula = %s",
-                    (
-                        pyidnm,
+                        textopy,
                         cepy,
                     ),
                 )
                 connection.commit()
-                messagebox.showinfo("CONFIRMACION", "Proyecto Eliminado")
+                messagebox.showinfo("CONFIRMACION", "Tarea Eliminada")
             else:
-                messagebox.showinfo("CONFIRMACION", "Proyecto No Existe")
+                messagebox.showinfo("CONFIRMACION", "Tarea No Existe")
             self.py_entry.delete(0.0, END)
 
         self.dele["command"] = eliminar
