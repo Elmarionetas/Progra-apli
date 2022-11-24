@@ -1083,6 +1083,7 @@ class sb:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        self.master.iconbitmap("s.ico")
 
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
@@ -1340,6 +1341,7 @@ class todo:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        self.master.iconbitmap("s.ico")
 
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
@@ -1396,12 +1398,11 @@ class todo:
         )
 
         c.execute(
-                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (1, ce, tppy),
-            )
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (1, ce, tppy),
+        )
         todo = c.fetchall()
 
-        
         if c.rowcount == 1:
             s = todo[0]
             s1 = "NO"
@@ -1488,6 +1489,7 @@ class progress:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        self.master.iconbitmap("s.ico")
 
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
@@ -1544,14 +1546,14 @@ class progress:
         )
 
         c.execute(
-                "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
-                (2, ce, tppy),
-            )
+            "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
+            (2, ce, tppy),
+        )
         inpro = c.fetchall()
 
         if c.rowcount == 1:
             s = inpro[0]
-            s1  = "NO"
+            s1 = "NO"
         elif c.rowcount == 2:
             s = inpro[0]
             s1 = inpro[1]
@@ -1635,6 +1637,7 @@ class done:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        self.master.iconbitmap("s.ico")
 
         c.execute("select cedula from usuarios where username = %s", (user,))
         ce = c.fetchone()
@@ -1693,12 +1696,12 @@ class done:
         c.execute(
             "select tarea from tareas where estado = %s and cedula = %s and pyid = %s",
             (3, ce, tppy),
-            )
+        )
         done = c.fetchall()
 
         if c.rowcount == 1:
             s = done[0]
-            s1  = "NO"
+            s1 = "NO"
         elif c.rowcount == 2:
             s = done[0]
             s1 = done[1]
@@ -1783,6 +1786,7 @@ class modicrea:
         # ------------------------------ #
 
         self.master.config(bg="#9E91E9")
+        self.master.iconbitmap("s.ico")
 
         # -------- TITULO -------------- #
 
@@ -1792,7 +1796,7 @@ class modicrea:
             highlightcolor="#ECDAFB",
             highlightthickness=2,
             bg="#ECDAFB",
-            width=ws - 200,
+            width=ws - 230,
             height=700,
         )
 
@@ -1841,6 +1845,17 @@ class modicrea:
                 state="readonly",
             )
 
+        self.frameid = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbid = tk.Label(
+            self.frameid,
+            text="ID proyecto: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
+        )
+
         self.pyidlista = ttk.Combobox(
             self.Pycua, values=["1", "2", "3"], font=Font(size=15), state="readonly"
         )
@@ -1873,17 +1888,20 @@ class modicrea:
         self.py_entry.pack()
         self.frameusu.pack()
         self.lbusu.pack()
+        self.frameid.pack()
+        self.lbid.pack()
         self.usuario.pack()
         self.boton.pack()
         self.dele.pack()
         self.pyidlista.pack()
         self.titleframe.place(rely=0.05, relx=0.5, anchor=CENTER)
         self.Pycua.place(rely=0.5, relx=0.5, anchor=CENTER)
-        self.framepy.place(rely=0.2, relx=0.1, anchor=CENTER)
-        self.py_entry.place(rely=0.26, relx=0.36, anchor=CENTER, width=600, height=150)
-        self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
-        self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
-        self.pyidlista.place(rely=0.5, relx=0.6, anchor=CENTER)
+        self.framepy.place(rely=0.38, relx=0.1, anchor=CENTER)
+        self.py_entry.place(rely=0.45, relx=0.36, anchor=CENTER, width=600, height=150)
+        self.frameusu.place(rely=0.23, relx=0.1, anchor=CENTER)
+        self.frameid.place(rely=0.23, relx=0.42, anchor=CENTER)
+        self.usuario.place(rely=0.23, relx=0.25, anchor=CENTER)
+        self.pyidlista.place(rely=0.23, relx=0.57, anchor=CENTER)
         self.boton.place(rely=0.7, relx=0.3, anchor=CENTER)
         self.dele.place(rely=0.7, relx=0.7, anchor=CENTER)
 
@@ -2045,14 +2063,13 @@ class modicreatk:
         self.frameusu = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
         self.lbusu = tk.Label(
             self.frameusu,
-            text="Estado: ",
+            text="Usuario: ",
             padx=10,
             pady=5,
             fg="black",
             font=("Orbitron", 20),
             width=10,
         )
-
 
         c.execute("select username from usuarios where username = %s", (user,))
         usuarios = c.fetchall()
@@ -2063,6 +2080,17 @@ class modicreatk:
             values=usuarios[0],
             font=Font(size=15),
             state="readonly",
+        )
+
+        self.frameid = tk.Frame(self.Pycua, bg="#9E91E9", padx=1, pady=1)
+        self.lbid = tk.Label(
+            self.frameid,
+            text="Estado Tarea: ",
+            padx=10,
+            pady=5,
+            fg="black",
+            font=("Orbitron", 20),
+            width=10,
         )
 
         self.pyidlista = ttk.Combobox(
@@ -2097,17 +2125,20 @@ class modicreatk:
         self.py_entry.pack()
         self.frameusu.pack()
         self.lbusu.pack()
+        self.frameid.pack()
+        self.lbid.pack()
         self.usuario.pack()
         self.boton.pack()
         self.dele.pack()
         self.pyidlista.pack()
         self.titleframe.place(rely=0.05, relx=0.5, anchor=CENTER)
         self.Pycua.place(rely=0.5, relx=0.5, anchor=CENTER)
-        self.framepy.place(rely=0.2, relx=0.1, anchor=CENTER)
-        self.py_entry.place(rely=0.26, relx=0.36, anchor=CENTER, width=600, height=150)
-        self.frameusu.place(rely=0.5, relx=0.1, anchor=CENTER)
-        self.usuario.place(rely=0.5, relx=0.32, anchor=CENTER)
-        self.pyidlista.place(rely=0.5, relx=0.6, anchor=CENTER)
+        self.framepy.place(rely=0.38, relx=0.1, anchor=CENTER)
+        self.py_entry.place(rely=0.45, relx=0.36, anchor=CENTER, width=600, height=150)
+        self.frameusu.place(rely=0.23, relx=0.1, anchor=CENTER)
+        self.frameid.place(rely=0.23, relx=0.42, anchor=CENTER)
+        self.usuario.place(rely=0.23, relx=0.25, anchor=CENTER)
+        self.pyidlista.place(rely=0.23, relx=0.57, anchor=CENTER)
         self.boton.place(rely=0.7, relx=0.3, anchor=CENTER)
         self.dele.place(rely=0.7, relx=0.7, anchor=CENTER)
 
